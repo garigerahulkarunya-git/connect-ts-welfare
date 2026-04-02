@@ -225,7 +225,6 @@ export const schemes: Scheme[] = [
     icon: "book-open",
   },
 ];
-];
 
 export const officials: Official[] = [
   { name: "Shri. K. Chandrashekar", designation: "Secretary", photo: "", quote: "Our mission is to ensure every minority citizen has the tools to succeed and contribute to the state's progress." },
