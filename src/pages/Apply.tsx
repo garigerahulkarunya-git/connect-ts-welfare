@@ -1,230 +1,671 @@
-import { useState } from "react";
-import { CheckCircle2, Upload, ArrowLeft, ArrowRight, FileCheck } from "lucide-react";
+import { useState, useRef, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
+import {
+  CheckCircle2, Upload, ArrowLeft, ArrowRight, FileText, Info, Lightbulb, Phone,
+  Save, Copy, Download, Mail, Bell, Shield, Check, ChevronDown, Camera, FileCheck
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import Layout from "@/components/layout/Layout";
+import { Textarea } from "@/components/ui/textarea";
+import { schemes } from "@/data/mockData";
 
-const steps = ["Eligibility Check", "Personal Details", "Document Upload", "Review & Submit"];
+const stepLabels = ["Eligibility", "Personal", "Documents", "Review"];
+
+interface UploadedFile {
+  name: string;
+  size: string;
+}
+
+const TrusteeGuide = () => (
+  <div className="space-y-3">
+    <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4">
+      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
+        T
+      </div>
+      <div>
+        <p className="font-semibold text-primary text-sm">Trustee Guide</p>
+        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Assisting your journey</p>
+      </div>
+    </div>
+    <div className="space-y-1">
+      <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left">
+        <Info className="h-4 w-4 text-primary" />
+        <span className="text-sm font-medium">Instructions</span>
+      </button>
+      <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+        <Lightbulb className="h-4 w-4 text-accent" />
+        <span className="text-sm font-medium">Pro-tips</span>
+      </button>
+      <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+        <Phone className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium">Helpline</span>
+      </button>
+    </div>
+    <Button variant="outline" className="w-full mt-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+      <Phone className="h-4 w-4 mr-2" /> Call Support
+    </Button>
+  </div>
+);
 
 const Apply = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({
-    isCommunity: false, isIncome: false, isResident: false,
-    fullName: "", aadhaar: "", phone: "", email: "", address: "", district: "", scheme: "",
-    docs: [] as string[],
+  const [certified, setCertified] = useState(false);
+
+  // Eligibility state
+  const [isChristian, setIsChristian] = useState<boolean | null>(null);
+  const [ageRange, setAgeRange] = useState("18-35");
+  const [incomeRange, setIncomeRange] = useState("below-1l");
+
+  // Personal details state
+  const [fullName, setFullName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [aadhaar, setAadhaar] = useState("");
+  const [address, setAddress] = useState("");
+  const [district, setDistrict] = useState("");
+  const [dob, setDob] = useState("");
+
+  // Document state
+  const [uploadedDocs, setUploadedDocs] = useState<Record<string, UploadedFile | null>>({
+    aadhaar: null,
+    income: null,
+    community: null,
+    photo: null,
   });
 
-  const updateForm = (field: string, value: any) => setForm((p) => ({ ...p, [field]: value }));
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  const applicationId = useMemo(() => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let id = "TGC-2026-";
+    for (let i = 0; i < 5; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+    return id;
+  }, []);
+
+  const isEligible = isChristian === true;
 
   const canProceed = () => {
-    if (currentStep === 0) return form.isCommunity && form.isIncome && form.isResident;
-    if (currentStep === 1) return form.fullName && form.aadhaar && form.phone && form.district;
+    if (currentStep === 0) return isEligible;
+    if (currentStep === 1) return fullName && mobile && aadhaar && district;
+    if (currentStep === 2) return true;
+    if (currentStep === 3) return certified;
     return true;
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+  const handleFileUpload = (docKey: string) => {
+    const input = fileInputRefs.current[docKey];
+    if (input) input.click();
   };
 
+  const handleFileChange = (docKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeStr = file.size > 1024 * 1024
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+        : `${(file.size / 1024).toFixed(0)} KB`;
+      setUploadedDocs(prev => ({ ...prev, [docKey]: { name: file.name, size: sizeStr } }));
+    }
+  };
+
+  const handleSubmit = () => setSubmitted(true);
+
+  const copyToClipboard = () => navigator.clipboard?.writeText(applicationId);
+
+  // Success Screen
   if (submitted) {
     return (
-      <Layout>
-        <section className="section-padding">
-          <div className="container max-w-lg text-center">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 className="h-10 w-10 text-green-600" />
+      <div className="min-h-screen bg-muted/30">
+        {/* Step nav header */}
+        <header className="bg-card border-b border-border">
+          <div className="container flex items-center justify-between py-4">
+            <Link to="/" className="font-extrabold text-foreground tracking-tight">TGCMFC MODERN TRUSTEE</Link>
+            <nav className="hidden md:flex items-center gap-6">
+              {stepLabels.map((label, i) => (
+                <span key={label} className={`text-sm font-medium ${i === 3 ? "text-primary border-b-2 border-primary pb-1" : "text-muted-foreground"}`}>
+                  {label}
+                </span>
+              ))}
+            </nav>
+            <div className="flex items-center gap-2">
+              <button className="h-8 w-8 rounded-full bg-muted flex items-center justify-center"><Info className="h-4 w-4" /></button>
+              <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">A</div>
             </div>
-            <h1 className="text-2xl font-bold">Application Submitted!</h1>
-            <p className="mt-3 text-muted-foreground">Your application has been received successfully.</p>
-            <Card className="mt-6">
-              <CardContent className="p-6">
-                <p className="text-sm text-muted-foreground">Your Application ID</p>
-                <p className="text-2xl font-bold text-primary mt-1">TGCMFC-2026-{Math.floor(Math.random() * 90000) + 10000}</p>
-                <p className="text-sm text-muted-foreground mt-3">Please save this ID for future reference and tracking.</p>
-              </CardContent>
-            </Card>
-            <div className="mt-6 flex justify-center gap-3">
-              <Button onClick={() => { setSubmitted(false); setCurrentStep(0); setForm({ isCommunity: false, isIncome: false, isResident: false, fullName: "", aadhaar: "", phone: "", email: "", address: "", district: "", scheme: "", docs: [] }); }}>
-                New Application
-              </Button>
-              <Button variant="outline" onClick={() => window.location.href = "/grievance"}>
-                Track Status
+          </div>
+        </header>
+
+        <div className="container py-12 max-w-3xl text-center">
+          <div className="bg-card rounded-3xl p-8 md:p-12 shadow-sm">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground border border-border rounded-full px-4 py-1.5 mb-6">
+              <CheckCircle2 className="h-3.5 w-3.5" /> Submission Complete
+            </span>
+
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <Check className="h-8 w-8 text-green-600" />
+            </div>
+
+            <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Application Submitted Successfully!</h1>
+            <p className="mt-4 text-muted-foreground max-w-md mx-auto">
+              We have received your application for the <strong className="text-foreground">Educational Scholarship Scheme</strong>. Our trustees will now begin the verification process. You can track your status anytime through your dashboard.
+            </p>
+
+            {/* Reference Number */}
+            <div className="mt-8 bg-muted/60 rounded-2xl p-6 border border-dashed border-border">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Reference Number</p>
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-2xl md:text-3xl font-extrabold text-primary tracking-wider">{applicationId}</span>
+                <button onClick={copyToClipboard} className="h-8 w-8 rounded-md bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="Copy">
+                  <Copy className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+              <Link to="/grievance">
+                <Button size="lg" className="font-semibold min-w-[200px]">
+                  <Shield className="h-4 w-4 mr-2" /> Track Application
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="font-semibold min-w-[200px] bg-accent/10 border-accent/30 text-foreground hover:bg-accent/20">
+                <Download className="h-4 w-4 mr-2" /> Download Receipt
               </Button>
             </div>
           </div>
-        </section>
-      </Layout>
+
+          {/* Info cards */}
+          <div className="grid sm:grid-cols-3 gap-4 mt-8">
+            {[
+              { icon: Mail, title: "Email Sent", desc: "A copy of your receipt has been sent to your registered email address." },
+              { icon: FileText, title: "Verification", desc: "Standard processing time for verification is 7-10 working days." },
+              { icon: Bell, title: "Stay Alert", desc: "You will receive SMS updates at every stage of the approval process." },
+            ].map(card => (
+              <div key={card.title} className="flex items-start gap-3 text-left bg-card rounded-xl p-4 border border-border">
+                <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <card.icon className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{card.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{card.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pro tip */}
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between bg-card rounded-xl p-4 border border-border text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Lightbulb className="h-4 w-4 text-accent" />
+              <em>Pro-tip: Keep your Aadhaar linked to your bank account for direct benefit transfer.</em>
+            </div>
+            <a href="tel:1800425XXXX" className="flex items-center gap-1 text-primary font-semibold hover:underline mt-2 sm:mt-0">
+              <Phone className="h-4 w-4" /> Need help? 1800-425-XXXX
+            </a>
+          </div>
+        </div>
+      </div>
     );
   }
 
+  // Main Form
   return (
-    <Layout>
-      <section className="gov-gradient text-primary-foreground py-10">
-        <div className="container">
-          <h1 className="text-3xl font-bold">Apply for Scheme</h1>
-          <p className="mt-2 opacity-80">Complete the application in 4 simple steps</p>
+    <div className="min-h-screen bg-muted/30 flex flex-col">
+      {/* Step nav header */}
+      <header className="bg-card border-b border-border sticky top-0 z-50">
+        <div className="container flex items-center justify-between py-4">
+          <Link to="/" className="font-extrabold text-foreground tracking-tight text-sm md:text-base">TGCMFC MODERN TRUSTEE</Link>
+          <nav className="hidden md:flex items-center gap-6">
+            {stepLabels.map((label, i) => (
+              <button
+                key={label}
+                onClick={() => { if (i < currentStep) setCurrentStep(i); }}
+                className={`text-sm font-medium transition-colors ${
+                  i === currentStep
+                    ? "text-primary border-b-2 border-primary pb-1"
+                    : i < currentStep
+                    ? "text-foreground cursor-pointer hover:text-primary"
+                    : "text-muted-foreground cursor-default"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+          <div className="flex items-center gap-2">
+            <button className="h-8 w-8 rounded-full bg-muted flex items-center justify-center"><Info className="h-4 w-4" /></button>
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">A</div>
+          </div>
         </div>
-      </section>
+      </header>
 
-      <section className="section-padding">
-        <div className="container max-w-2xl">
-          {/* Progress */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
-              {steps.map((step, i) => (
-                <div key={step} className="flex items-center">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                    i < currentStep ? "bg-green-600 text-primary-foreground" : i === currentStep ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                  }`}>
-                    {i < currentStep ? <CheckCircle2 className="h-5 w-5" /> : i + 1}
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div className={`hidden sm:block h-0.5 w-12 md:w-20 lg:w-28 mx-1 ${i < currentStep ? "bg-green-600" : "bg-muted"}`} />
-                  )}
-                </div>
-              ))}
-            </div>
-            <p className="text-sm font-medium text-center mt-2">Step {currentStep + 1}: {steps[currentStep]}</p>
+      {/* Mobile step indicator */}
+      <div className="md:hidden bg-card border-b border-border px-4 py-2">
+        <div className="flex gap-1">
+          {stepLabels.map((_, i) => (
+            <div key={i} className={`h-1 flex-1 rounded-full ${i <= currentStep ? "bg-primary" : "bg-muted"}`} />
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground mt-1.5">Step {currentStep + 1} of 4: {stepLabels[currentStep]}</p>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 container py-8">
+        <div className="grid lg:grid-cols-[1fr_300px] gap-8">
+          {/* Main content */}
+          <div>
+            {/* Step 0: Eligibility */}
+            {currentStep === 0 && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Eligibility Check</h1>
+                <p className="mt-2 text-muted-foreground">
+                  The first step in your journey toward financial empowerment. Let's verify your status for the TGCMFC Modern Trustee scheme.
+                </p>
+
+                <Card className="mt-6">
+                  <CardContent className="p-6 space-y-8">
+                    {/* Christian minority */}
+                    <div>
+                      <p className="font-semibold text-foreground mb-3">Are you a Christian minority?</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          onClick={() => setIsChristian(true)}
+                          className={`h-12 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                            isChristian === true
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          {isChristian === true && <Check className="h-4 w-4" />} Yes
+                        </button>
+                        <button
+                          onClick={() => setIsChristian(false)}
+                          className={`h-12 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                            isChristian === false
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80"
+                          }`}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Age range */}
+                    <div>
+                      <p className="font-semibold text-foreground mb-3">What is your age range?</p>
+                      <div className="relative">
+                        <select
+                          value={ageRange}
+                          onChange={(e) => setAgeRange(e.target.value)}
+                          className="w-full h-12 rounded-xl bg-muted text-foreground px-4 text-sm appearance-none focus:ring-2 focus:ring-primary focus:outline-none border-0"
+                        >
+                          <option value="18-35">18-35</option>
+                          <option value="36-45">36-45</option>
+                          <option value="46-55">46-55</option>
+                          <option value="55+">55+</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Income range */}
+                    <div>
+                      <p className="font-semibold text-foreground mb-3">What is your annual income range?</p>
+                      <div className="relative">
+                        <select
+                          value={incomeRange}
+                          onChange={(e) => setIncomeRange(e.target.value)}
+                          className="w-full h-12 rounded-xl bg-muted text-foreground px-4 text-sm appearance-none focus:ring-2 focus:ring-primary focus:outline-none border-0"
+                        >
+                          <option value="below-1l">Below 1 Lakh</option>
+                          <option value="1l-2.5l">₹1 - 2.5 Lakhs</option>
+                          <option value="2.5l-5l">₹2.5 - 5 Lakhs</option>
+                          <option value="above-5l">Above 5 Lakhs</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Eligibility result */}
+                    {isChristian !== null && (
+                      <div className={`rounded-xl p-4 flex items-center gap-3 ${isEligible ? "bg-green-50 border border-green-200" : "bg-destructive/10 border border-destructive/20"}`}>
+                        <CheckCircle2 className={`h-8 w-8 ${isEligible ? "text-green-600" : "text-destructive"}`} />
+                        <div>
+                          <p className={`font-bold ${isEligible ? "text-green-800" : "text-destructive"}`}>
+                            {isEligible ? "Eligible!" : "Not Eligible"}
+                          </p>
+                          <p className={`text-sm ${isEligible ? "text-green-700" : "text-destructive/80"}`}>
+                            {isEligible ? "You meet the core criteria for this trustee program." : "This scheme is for Christian minorities only."}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Step 1: Personal Details */}
+            {currentStep === 1 && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Personal Details</h1>
+                <p className="mt-2 text-muted-foreground">Step 2 of 4: Provide your identification and residency information.</p>
+
+                <Card className="mt-6">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="font-bold text-foreground">Applicant Information</h3>
+                      <span className="text-xs text-accent flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full bg-accent" /> AUTO-SAVE: LAST SAVED 2 MINUTES AGO
+                      </span>
+                    </div>
+
+                    <div className="space-y-5">
+                      <div>
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Full Name (As per Aadhaar)</label>
+                        <Input
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          placeholder="John Doe"
+                          className="mt-1.5 h-12 bg-muted border-0 rounded-xl"
+                        />
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Mobile Number</label>
+                          <div className="relative mt-1.5">
+                            <Input
+                              value={mobile}
+                              onChange={(e) => setMobile(e.target.value)}
+                              placeholder="98765 43210"
+                              className="h-12 bg-muted border-0 rounded-xl pr-20"
+                            />
+                            <button className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-md">
+                              VERIFY
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-muted-foreground mt-1 italic">Enter 10-digit mobile number for OTP</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Aadhaar Number</label>
+                          <Input
+                            value={aadhaar}
+                            onChange={(e) => setAadhaar(e.target.value)}
+                            placeholder="XXXX XXXX XXXX"
+                            className="mt-1.5 h-12 bg-muted border-0 rounded-xl"
+                          />
+                          <p className="text-[11px] text-muted-foreground mt-1 italic">Unique 12-digit identification</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Permanent Address</label>
+                        <Textarea
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          placeholder="House No, Street, Landmark..."
+                          className="mt-1.5 bg-muted border-0 rounded-xl min-h-[80px]"
+                        />
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">District</label>
+                          <div className="relative mt-1.5">
+                            <select
+                              value={district}
+                              onChange={(e) => setDistrict(e.target.value)}
+                              className="w-full h-12 rounded-xl bg-muted text-foreground px-4 text-sm appearance-none focus:ring-2 focus:ring-primary focus:outline-none border-0"
+                            >
+                              <option value="">Select District</option>
+                              {["Hyderabad", "Rangareddy", "Medchal-Malkajgiri", "Warangal Urban", "Karimnagar", "Khammam", "Nizamabad", "Adilabad", "Nalgonda", "Mahabubnagar"].map(d => (
+                                <option key={d} value={d}>{d}</option>
+                              ))}
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date of Birth</label>
+                          <Input
+                            type="date"
+                            value={dob}
+                            onChange={(e) => setDob(e.target.value)}
+                            className="mt-1.5 h-12 bg-muted border-0 rounded-xl"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Step 2: Document Upload */}
+            {currentStep === 2 && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Document Upload</h1>
+                <p className="mt-2 text-muted-foreground">Step 3 of 4: Please provide authentic digital copies of your credentials.</p>
+
+                <Card className="mt-6">
+                  <CardContent className="p-6">
+                    {/* Format notice */}
+                    <div className="bg-accent/10 rounded-xl p-4 flex items-center gap-3 mb-6">
+                      <Info className="h-5 w-5 text-accent shrink-0" />
+                      <p className="text-sm text-foreground">Accepted file formats: PDF, JPG, PNG (Max 5MB per file)</p>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      {[
+                        { key: "aadhaar", label: "Aadhaar (Card)", icon: Upload, hint: "Drag & Drop or Click to upload" },
+                        { key: "income", label: "Income Certificate", icon: FileText, hint: "PDF or JPG only" },
+                        { key: "community", label: "Community Certificate", icon: Upload, hint: "Click to browse files" },
+                        { key: "photo", label: "Passport-sized Photo", icon: Camera, hint: "JPG or PNG only" },
+                      ].map(doc => (
+                        <div key={doc.key}>
+                          <p className="font-semibold text-foreground mb-2">{doc.label}</p>
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            ref={el => { fileInputRefs.current[doc.key] = el; }}
+                            onChange={(e) => handleFileChange(doc.key, e)}
+                          />
+                          <button
+                            onClick={() => handleFileUpload(doc.key)}
+                            className="w-full rounded-xl border-2 border-dashed border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors p-8 flex flex-col items-center gap-2"
+                          >
+                            <doc.icon className="h-6 w-6 text-primary" />
+                            <span className="text-sm text-muted-foreground">{doc.hint}</span>
+                          </button>
+                          {uploadedDocs[doc.key] && (
+                            <div className="flex items-center gap-2 mt-2 text-sm text-primary">
+                              <CheckCircle2 className="h-4 w-4" />
+                              <span>{uploadedDocs[doc.key]!.name}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Upload status indicators */}
+                    <div className="grid grid-cols-3 gap-3 mt-6">
+                      {[
+                        { color: "bg-green-100 text-green-700", icon: CheckCircle2, label: "Verified" },
+                        { color: "bg-accent/10 text-accent", icon: FileCheck, label: "Pending" },
+                        { color: "bg-primary/10 text-primary", icon: Upload, label: "Upload" },
+                      ].map(status => (
+                        <div key={status.label} className={`${status.color} rounded-lg p-3 flex items-center gap-2 text-xs font-semibold`}>
+                          <status.icon className="h-4 w-4" />
+                          {status.label}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Step 3: Review & Submit */}
+            {currentStep === 3 && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Review & Submit</h1>
+                <p className="mt-2 text-muted-foreground">
+                  Please review all your details carefully before final submission. Once submitted, your application will enter the verification phase.
+                </p>
+
+                <Card className="mt-6">
+                  <CardContent className="p-6 space-y-6">
+                    {/* Personal Details Review */}
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2">
+                          <span className="h-5 w-1 bg-primary rounded-full" /> Personal Details
+                        </h3>
+                        <button onClick={() => setCurrentStep(1)} className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
+                          EDIT ✏️
+                        </button>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
+                        <div>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Full Name</p>
+                          <p className="text-foreground font-medium mt-0.5">{fullName || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Mobile Number</p>
+                          <p className="text-foreground font-medium mt-0.5">{mobile ? `+91 ${mobile}` : "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Aadhaar Number</p>
+                          <p className="text-foreground font-medium mt-0.5">{aadhaar ? `XXXX XXXX ${aadhaar.slice(-4)}` : "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Date of Birth</p>
+                          <p className="text-foreground font-medium mt-0.5">{dob ? new Date(dob).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "—"}</p>
+                        </div>
+                        <div className="sm:col-span-2">
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Residential Address</p>
+                          <p className="text-foreground font-medium mt-0.5">{address || "—"}{district ? `, ${district}, Telangana` : ""}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr className="border-border" />
+
+                    {/* Documents Review */}
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold text-foreground flex items-center gap-2">
+                          <span className="h-5 w-1 bg-primary rounded-full" /> Documents
+                        </h3>
+                        <button onClick={() => setCurrentStep(2)} className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
+                          EDIT ✏️
+                        </button>
+                      </div>
+                      <div className="grid sm:grid-cols-3 gap-3">
+                        {[
+                          { key: "aadhaar", label: "Aadhaar_Card.pdf" },
+                          { key: "income", label: "Income_Certificate.pdf" },
+                          { key: "community", label: "Community_Cert.pdf" },
+                        ].map(doc => (
+                          <div key={doc.key} className="flex items-center gap-3 bg-muted rounded-xl p-3">
+                            <FileText className="h-5 w-5 text-primary shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {uploadedDocs[doc.key]?.name || doc.label}
+                              </p>
+                              <p className="text-[11px] text-muted-foreground">
+                                VERIFIED • {uploadedDocs[doc.key]?.size || "1.2 MB"}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <hr className="border-border" />
+
+                    {/* Certification */}
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        checked={certified}
+                        onCheckedChange={(v) => setCertified(v === true)}
+                        className="mt-0.5"
+                      />
+                      <div>
+                        <p className="font-semibold text-sm text-foreground">I certify that all the information provided is correct.</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          I understand that any false information may lead to the rejection of my application and potential legal action under corporate bylaws.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
 
-          <Card>
-            <CardContent className="p-6">
-              {/* Step 0: Eligibility */}
-              {currentStep === 0 && (
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Eligibility Check</h2>
-                  <p className="text-sm text-muted-foreground">Please confirm you meet the basic eligibility criteria.</p>
-                  <div className="space-y-3 mt-4">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <Checkbox checked={form.isCommunity} onCheckedChange={(c) => updateForm("isCommunity", c)} />
-                      <span className="text-sm">I belong to the Christian minority community</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <Checkbox checked={form.isIncome} onCheckedChange={(c) => updateForm("isIncome", c)} />
-                      <span className="text-sm">My annual family income is within the eligible limit</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <Checkbox checked={form.isResident} onCheckedChange={(c) => updateForm("isResident", c)} />
-                      <span className="text-sm">I am a resident of Telangana</span>
-                    </label>
-                  </div>
-                </div>
-              )}
+          {/* Right sidebar - Trustee Guide */}
+          <div className="hidden lg:block">
+            <div className="sticky top-24">
+              <TrusteeGuide />
 
-              {/* Step 1: Personal Details */}
-              {currentStep === 1 && (
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Personal Details</h2>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <Label htmlFor="fullName">Full Name *</Label>
-                      <Input id="fullName" value={form.fullName} onChange={(e) => updateForm("fullName", e.target.value)} placeholder="Enter full name" />
-                    </div>
-                    <div>
-                      <Label htmlFor="aadhaar">Aadhaar Number *</Label>
-                      <Input id="aadhaar" value={form.aadhaar} onChange={(e) => updateForm("aadhaar", e.target.value)} placeholder="XXXX-XXXX-XXXX" />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} placeholder="+91 XXXXX XXXXX" />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" value={form.email} onChange={(e) => updateForm("email", e.target.value)} placeholder="email@example.com" />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <Label htmlFor="address">Address</Label>
-                      <Input id="address" value={form.address} onChange={(e) => updateForm("address", e.target.value)} placeholder="Full address" />
-                    </div>
-                    <div>
-                      <Label>District *</Label>
-                      <Select value={form.district} onValueChange={(v) => updateForm("district", v)}>
-                        <SelectTrigger><SelectValue placeholder="Select district" /></SelectTrigger>
-                        <SelectContent>
-                          {["Hyderabad", "Rangareddy", "Medchal-Malkajgiri", "Warangal", "Karimnagar", "Khammam", "Nizamabad", "Adilabad", "Nalgonda", "Mahabubnagar"].map((d) => (
-                            <SelectItem key={d} value={d}>{d}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Scheme</Label>
-                      <Select value={form.scheme} onValueChange={(v) => updateForm("scheme", v)}>
-                        <SelectTrigger><SelectValue placeholder="Select scheme" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="edu-scholarship">Education Scholarship</SelectItem>
-                          <SelectItem value="housing-subsidy">Housing Subsidy</SelectItem>
-                          <SelectItem value="skill-training">Skill Development</SelectItem>
-                          <SelectItem value="micro-enterprise">Micro Enterprise Loan</SelectItem>
-                          <SelectItem value="medical-aid">Medical Aid</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2: Document Upload */}
-              {currentStep === 2 && (
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Document Upload</h2>
-                  <p className="text-sm text-muted-foreground">Upload the required documents in PDF or image format.</p>
-                  {["Aadhaar Card", "Community Certificate", "Income Certificate", "Bank Passbook", "Passport Photo"].map((doc) => (
-                    <div key={doc} className="flex items-center justify-between border rounded-lg p-3">
-                      <div className="flex items-center gap-2">
-                        <FileCheck className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{doc}</span>
-                      </div>
-                      <Button size="sm" variant="outline" className="gap-1">
-                        <Upload className="h-3 w-3" /> Upload
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Step 3: Review */}
               {currentStep === 3 && (
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Review & Submit</h2>
-                  <div className="rounded-lg bg-muted p-4 space-y-2 text-sm">
-                    <p><strong>Name:</strong> {form.fullName || "—"}</p>
-                    <p><strong>Aadhaar:</strong> {form.aadhaar || "—"}</p>
-                    <p><strong>Phone:</strong> {form.phone || "—"}</p>
-                    <p><strong>Email:</strong> {form.email || "—"}</p>
-                    <p><strong>District:</strong> {form.district || "—"}</p>
-                    <p><strong>Address:</strong> {form.address || "—"}</p>
-                  </div>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <Checkbox />
-                    <span className="text-sm">I declare that all the information provided is true and correct.</span>
-                  </label>
+                <div className="mt-4 bg-muted rounded-xl p-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Submission Tip</p>
+                  <p className="text-sm text-foreground">
+                    Ensure your Aadhaar is linked to the mobile number provided to receive the final OTP confirmation.
+                  </p>
+                  <Button variant="outline" size="sm" className="w-full mt-3 uppercase tracking-wider text-xs font-bold">
+                    Call Support
+                  </Button>
                 </div>
               )}
-
-              {/* Navigation */}
-              <div className="mt-6 flex justify-between">
-                <Button variant="outline" disabled={currentStep === 0} onClick={() => setCurrentStep((s) => s - 1)}>
-                  <ArrowLeft className="mr-1 h-4 w-4" /> Previous
-                </Button>
-                {currentStep < steps.length - 1 ? (
-                  <Button disabled={!canProceed()} onClick={() => setCurrentStep((s) => s + 1)}>
-                    Next <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
-                ) : (
-                  <Button onClick={handleSubmit}>Submit Application</Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
-      </section>
-    </Layout>
+      </div>
+
+      {/* Bottom navigation bar */}
+      <div className="sticky bottom-0 bg-card border-t border-border py-4 z-40">
+        <div className="container flex items-center justify-between">
+          <button
+            onClick={() => currentStep > 0 && setCurrentStep(s => s - 1)}
+            disabled={currentStep === 0}
+            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-40 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> BACK
+          </button>
+
+          <button className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-foreground transition-colors">
+            <Save className="h-5 w-5" />
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              {currentStep === 3 ? "Save" : "Save Progress"}
+            </span>
+          </button>
+
+          {currentStep < 3 ? (
+            <Button
+              onClick={() => setCurrentStep(s => s + 1)}
+              disabled={!canProceed()}
+              className="min-w-[200px] font-semibold"
+            >
+              NEXT: {stepLabels[currentStep + 1]?.toUpperCase()} <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit}
+              disabled={!certified}
+              className="min-w-[200px] font-semibold"
+            >
+              FINAL SUBMIT <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
