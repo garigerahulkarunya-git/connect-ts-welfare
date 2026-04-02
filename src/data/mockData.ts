@@ -5,12 +5,15 @@ export interface Scheme {
   shortDescription: string;
   category: string;
   eligibility: string[];
-  status: "OPEN" | "CLOSED";
+  status: "OPEN" | "CLOSED" | "UPCOMING";
   deadline: string;
   documents: string[];
   steps: string[];
   faqs: { q: string; a: string }[];
   amount: string;
+  tags?: string[];
+  flagship?: boolean;
+  icon?: string;
 }
 
 export interface GrievanceTicket {
