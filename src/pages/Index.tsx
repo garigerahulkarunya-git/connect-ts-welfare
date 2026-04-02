@@ -141,7 +141,7 @@ const Index = () => {
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                       <scheme.icon className="h-6 w-6 text-primary" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-green-100 text-green-700">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-accent/20 text-accent-foreground">
                       {scheme.status}
                     </span>
                   </div>
