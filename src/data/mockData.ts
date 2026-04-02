@@ -153,10 +153,9 @@ export const schemes: Scheme[] = [
 ];
 
 export const officials: Official[] = [
-  { name: "Sri. A. Bhaskar Rao, IAS", designation: "Managing Director", photo: "" },
-  { name: "Sri. K. Praveen Kumar", designation: "General Manager", photo: "" },
-  { name: "Smt. Mary Johnson", designation: "Deputy Director", photo: "" },
-  { name: "Sri. David Thomas", designation: "Chief Accounts Officer", photo: "" },
+  { name: "Shri. K. Chandrashekar", designation: "Secretary", photo: "", quote: "Our mission is to ensure every minority citizen has the tools to succeed and contribute to the state's progress." },
+  { name: "Smt. Sarah Joseph", designation: "Managing Director", photo: "", quote: "Transparency and digital-first governance are the pillars of TGCMFC's commitment to the community." },
+  { name: "Shri. Peter Anthony", designation: "Chairman", photo: "", quote: "We are building a future where financial barriers do not limit the potential of our talented youth." },
 ];
 
 export const districts: District[] = [
