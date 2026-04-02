@@ -25,6 +25,7 @@ export interface Official {
   name: string;
   designation: string;
   photo: string;
+  quote?: string;
 }
 
 export interface District {
