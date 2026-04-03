@@ -22,6 +22,14 @@ export interface GrievanceTicket {
   status: "Submitted" | "Under Review" | "Resolved";
   date: string;
   description: string;
+  category?: string;
+  district?: string;
+  scheme?: string;
+  officerAssigned?: string;
+  department?: string;
+  priority?: "HIGH PRIORITY" | "MEDIUM" | "LOW";
+  timelineUpdate?: string;
+  timelineTime?: string;
 }
 
 export interface Official {
