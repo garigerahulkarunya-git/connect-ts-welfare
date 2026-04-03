@@ -22,6 +22,14 @@ export interface GrievanceTicket {
   status: "Submitted" | "Under Review" | "Resolved";
   date: string;
   description: string;
+  category?: string;
+  district?: string;
+  scheme?: string;
+  officerAssigned?: string;
+  department?: string;
+  priority?: "HIGH PRIORITY" | "MEDIUM" | "LOW";
+  timelineUpdate?: string;
+  timelineTime?: string;
 }
 
 export interface Official {
@@ -255,9 +263,20 @@ export const newsItems: NewsItem[] = [
 ];
 
 export const sampleGrievances: GrievanceTicket[] = [
-  { id: "GRV-2026-001", subject: "Scholarship amount not received", status: "Under Review", date: "2026-03-15", description: "Applied for education scholarship 3 months ago but haven't received the amount yet." },
-  { id: "GRV-2026-002", subject: "Document verification pending", status: "Submitted", date: "2026-03-28", description: "Documents submitted for housing scheme but no update on verification." },
-  { id: "GRV-2026-003", subject: "Loan application status unclear", status: "Resolved", date: "2026-02-10", description: "Micro enterprise loan application status was unclear. Issue resolved after escalation." },
+  { id: "TG-2026-0814", subject: "Scholarship amount not received", status: "Under Review", date: "Jan 15, 2026", description: "Applied for education scholarship 3 months ago but haven't received the amount yet.", category: "Delayed Approval", district: "Hyderabad", scheme: "Post-Matric Scholarship", officerAssigned: "P. Ramesh Rao", department: "DMWO", priority: "HIGH PRIORITY", timelineUpdate: "Grievance has been moved to the Institutional Desk. Verification of documents in progress at District Minority Welfare Office.", timelineTime: "2 hours ago" },
+  { id: "TG-2026-0412", subject: "Document verification pending", status: "Submitted", date: "Mar 28, 2026", description: "Documents submitted for housing scheme but no update on verification.", category: "Documentation Issue", district: "Warangal", scheme: "Economic Support", officerAssigned: "S. Mary Thomas", department: "DWMO", priority: "MEDIUM" },
+  { id: "TG-2026-1185", subject: "Loan application status unclear", status: "Resolved", date: "Feb 10, 2026", description: "Micro enterprise loan application status was unclear. Issue resolved after escalation.", category: "Delayed Approval", district: "Karimnagar", scheme: "Driver Empowerment", officerAssigned: "K. David Paul", department: "DMWO", priority: "LOW" },
+  { id: "TG-2026-0923", subject: "Payment delay in skill training stipend", status: "Under Review", date: "Mar 05, 2026", description: "Monthly stipend for skill training program not received for 2 months.", category: "Delayed Approval", district: "Nizamabad", scheme: "Skill Training Pro", officerAssigned: "R. Grace Samuel", department: "DWMO", priority: "HIGH PRIORITY" },
+  { id: "TG-2026-0567", subject: "Staff behavior at district office", status: "Submitted", date: "Mar 20, 2026", description: "Rude behavior by staff at the Khammam district office during document submission.", category: "Staff Behavior", district: "Khammam", scheme: "Church Repair Grant", officerAssigned: "J. Martin", department: "DMWO", priority: "MEDIUM" },
+  { id: "TG-2026-0234", subject: "Technical error in online application", status: "Resolved", date: "Jan 28, 2026", description: "Online portal showed error during application submission. Issue was a server timeout.", category: "Technical Error", district: "Hyderabad", scheme: "Overseas Study Grant", officerAssigned: "P. Ramesh Rao", department: "DMWO", priority: "LOW" },
+];
+
+export const grievanceDistrictStats = [
+  { name: "Hyderabad", complaints: 3200 },
+  { name: "Warangal", complaints: 2100 },
+  { name: "Nizamabad", complaints: 1800 },
+  { name: "Khammam", complaints: 1650 },
+  { name: "Karimnagar", complaints: 1400 },
 ];
 
 export const stats = {
