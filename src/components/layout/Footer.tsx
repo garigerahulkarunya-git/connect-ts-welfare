@@ -1,63 +1,82 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Twitter, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="gov-gradient text-primary-foreground">
-      <div className="container py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <h3 className="text-lg font-bold mb-4">TGCMFC</h3>
-            <p className="text-sm opacity-80 leading-relaxed">
-              Telangana Christian Minorities Finance Corporation is dedicated to the socio-economic
-              development of Christian minorities in Telangana through various welfare schemes and programs.
-            </p>
-          </div>
+    <footer>
+      {/* Main Footer */}
+      <div className="bg-foreground/95 text-background/80">
+        <div className="container py-12">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {/* About */}
+            <div>
+              <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-extrabold text-lg mb-4">
+                T
+              </div>
+              <p className="text-sm leading-relaxed">
+                The Telangana Christian (Minorities) Finance Corporation is dedicated to the progress and
+                prosperity of Christian Minorities in the state through targeted financial and social interventions.
+              </p>
+            </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><Link to="/schemes" className="hover:opacity-100 hover:underline">All Schemes</Link></li>
-              <li><Link to="/apply" className="hover:opacity-100 hover:underline">Apply for Scheme</Link></li>
-              <li><Link to="/grievance" className="hover:opacity-100 hover:underline">File Grievance</Link></li>
-              <li><Link to="/about" className="hover:opacity-100 hover:underline">About Us</Link></li>
-              <li><Link to="/contact" className="hover:opacity-100 hover:underline">Contact</Link></li>
-            </ul>
-          </div>
+            {/* Location */}
+            <div>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Location</h4>
+              <ul className="space-y-4 text-sm">
+                <li className="flex items-start gap-2">
+                  <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+                  <span>6th Floor, Haj House, Opp: Public Garden, Nampally, Hyderabad, Telangana - 500001</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 shrink-0 text-primary" />
+                  <a href="tel:04023391067" className="hover:text-background transition-colors">040-23391067 / 68</a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 shrink-0 text-primary" />
+                  <a href="mailto:tgcmfc@gmail.com" className="hover:text-background transition-colors">tgcmfc@gmail.com</a>
+                </li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Important Links</h4>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><a href="#" className="hover:opacity-100 hover:underline">RTI</a></li>
-              <li><a href="#" className="hover:opacity-100 hover:underline">Annual Reports</a></li>
-              <li><a href="#" className="hover:opacity-100 hover:underline">Tenders</a></li>
-              <li><a href="#" className="hover:opacity-100 hover:underline">Privacy Policy</a></li>
-              <li><a href="#" className="hover:opacity-100 hover:underline">Terms of Service</a></li>
-            </ul>
-          </div>
+            {/* Other Portals */}
+            <div>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Other Portals</h4>
+              <ul className="space-y-3 text-sm">
+                <li><a href="#" className="hover:text-background transition-colors">Telangana State Portal</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">Minority Welfare Department</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">Center for Good Governance</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">ePass Telangana</a></li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-3 text-sm opacity-80">
-              <li className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Minorities Bhawan, 5th Floor, Nampally, Hyderabad - 500001</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0" />
-                <a href="tel:+914023456789" className="hover:underline">040-2345-6789</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0" />
-                <a href="mailto:info@tgcmfc.gov.in" className="hover:underline">info@tgcmfc.gov.in</a>
-              </li>
-            </ul>
+            {/* Follow Us */}
+            <div>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Follow Us</h4>
+              <div className="flex items-center gap-3">
+                <a href="#" className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="Facebook">
+                  <Facebook className="h-5 w-5 text-background" />
+                </a>
+                <a href="#" className="h-10 w-10 rounded-lg bg-sky-500 flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="Twitter">
+                  <Twitter className="h-5 w-5 text-background" />
+                </a>
+                <a href="#" className="h-10 w-10 rounded-lg bg-red-600 flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="YouTube">
+                  <Youtube className="h-5 w-5 text-background" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-10 pt-6 border-t border-primary-foreground/20 text-center text-sm opacity-60">
-          <p>© {new Date().getFullYear()} Telangana Christian Minorities Finance Corporation. All rights reserved.</p>
-          <p className="mt-1">Designed & Developed for the Government of Telangana</p>
+      {/* Bottom Bar */}
+      <div className="bg-foreground text-background/50 py-4">
+        <div className="container flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] uppercase tracking-wider font-medium">
+          <p>© {new Date().getFullYear()} Telangana Christian (Minorities) Finance Corporation. All Rights Reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-background transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-background transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-background transition-colors">Sitemap</a>
+          </div>
         </div>
       </div>
     </footer>

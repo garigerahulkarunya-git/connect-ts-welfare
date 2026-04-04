@@ -1,309 +1,257 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, FileText, MessageSquare, Users, BookOpen, Heart, Shield, MessageCircle, GraduationCap, ClipboardCheck, AlertCircle, CheckSquare, Briefcase, Home as HomeIcon, Lightbulb, CreditCard, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, GraduationCap, Heart, Briefcase, Landmark, FileText, Download, ExternalLink, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import SchemeCard from "@/components/shared/SchemeCard";
-import { schemes, newsItems, stats, officials } from "@/data/mockData";
+import { schemes, newsItems, officials } from "@/data/mockData";
 import Layout from "@/components/layout/Layout";
 import heroIllustration from "@/assets/hero-illustration.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const essentialServices = [
-  { icon: GraduationCap, label: "Apply for Scholarship", desc: "Pre-matric and post-matric financial assistance for students.", to: "/apply" },
-  { icon: ClipboardCheck, label: "Track Application", desc: "Real-time status updates on your submitted applications.", to: "/grievance" },
-  { icon: AlertCircle, label: "Register Grievance", desc: "File a complaint or report issues for quick resolution.", to: "/grievance" },
-  { icon: CheckSquare, label: "Eligibility Checker", desc: "Quickly find out which schemes you qualify for.", to: "/schemes" },
+const heroSlides = [
+  {
+    tag: "ECONOMIC SUPPORT",
+    title: "Self-Employment Schemes",
+    desc: "Support for small business owners and entrepreneurs through subsidies and financial assistance.",
+  },
+  {
+    tag: "EDUCATION",
+    title: "Overseas Education Grant",
+    desc: "Financial assistance for Christian students pursuing higher education in foreign universities.",
+  },
+  {
+    tag: "SKILL DEVELOPMENT",
+    title: "Driver Empowerment Scheme",
+    desc: "Empowering youth through training and ownership of commercial vehicles.",
+  },
 ];
 
-const schemeCategories = [
-  { icon: Briefcase, label: "Driver Empowerment", desc: "Subsidized loans and skill training for professional heavy light vehicle driving.", status: "OPEN" as const },
-  { icon: GraduationCap, label: "Overseas Education", desc: "Financial assistance for students pursuing higher education in foreign universities.", status: "OPEN" as const },
-  { icon: Lightbulb, label: "Skill Training", desc: "Empowering youth through specialised job-oriented training programs.", status: "OPEN" as const },
-  { icon: CreditCard, label: "Subsidy Loans", desc: "Small business loans with attractive subsidies for self-employment.", status: "OPEN" as const },
+const schemeCards = [
+  { icon: GraduationCap, title: "Scholarships", desc: "Financial assistance for Christian students studying from class I to X in recognized schools.", link: "/schemes" },
+  { icon: Heart, title: "Shaadi Mubarak", desc: "One-time financial grant for Christian brides belonging to economically backward families.", link: "/schemes" },
+  { icon: Briefcase, title: "Driver Empowerment Scheme", desc: "Empowering youth through training and ownership of commercial vehicles.", link: "/schemes" },
+  { icon: Landmark, title: "Bank Related Support", desc: "Financial support and interest subvention for small businesses and housing loans.", link: "/schemes" },
+];
+
+const quickLinks = [
+  { label: "G.O's & Circulars", to: "/media" },
+  { label: "Employee Login", to: "#" },
+  { label: "Application Search", to: "/grievance" },
+  { label: "District Wise Contacts", to: "/contact" },
+  { label: "RTI Act Disclosure", to: "/about" },
+];
+
+const downloads = [
+  { label: "Application Forms", href: "#" },
+  { label: "Annual Report 2023-24", href: "#" },
+  { label: "Schemes Guideline", href: "#" },
 ];
 
 const Index = () => {
-  const featuredSchemes = schemes.filter(s => s.status === "OPEN").slice(0, 4);
-  const latestNews = newsItems.slice(0, 3);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const latestNews = newsItems.slice(0, 4);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const slide = heroSlides[currentSlide];
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="bg-background section-padding overflow-hidden">
+      {/* ===== MAIN 3-COLUMN SECTION ===== */}
+      <section className="bg-background py-6">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-primary mb-4">
-                Empowering Communities
-              </span>
-              <h1 className="text-3xl font-extrabold leading-tight md:text-4xl lg:text-5xl text-foreground">
-                Empowering Christian Minorities Through{" "}
-                <span className="text-accent">Welfare & Opportunity</span>
-              </h1>
-              <p className="mt-4 text-base text-muted-foreground md:text-lg leading-relaxed max-w-lg">
-                Access financial assistance, education, employment, and support schemes — all in one centralized digital portal designed for your growth.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link to="/apply">
-                  <Button size="lg" className="font-semibold">
-                    Apply for Scheme <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link to="/grievance">
-                  <Button size="lg" variant="outline" className="font-semibold">
-                    Track Application
-                  </Button>
-                </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_240px] gap-6">
+            {/* LEFT SIDEBAR — Latest News + Quick Links */}
+            <aside className="space-y-6 order-2 lg:order-1">
+              {/* Latest News */}
+              <div className="border border-border rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between bg-muted px-4 py-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-foreground uppercase tracking-wide">
+                    <Megaphone className="h-4 w-4 text-primary" />
+                    Latest News
+                  </h3>
+                  <Link to="/media" className="text-xs font-bold text-primary hover:underline">VIEW ALL</Link>
+                </div>
+                <div className="divide-y divide-border">
+                  {latestNews.map((item) => (
+                    <div key={item.id} className="px-4 py-3">
+                      <p className="text-sm font-semibold text-foreground leading-snug">{item.title}</p>
+                      <p className="text-[11px] text-primary/80 mt-1 italic">
+                        Posted on: {new Date(item.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <Link to="/grievance" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
-                <MessageSquare className="h-4 w-4" /> Submit a Grievance ↓
-              </Link>
-            </div>
-            <div className="relative hidden lg:block">
-              <img
-                src={heroIllustration}
-                alt="Diverse Indian professionals representing TGCMFC community empowerment"
-                width={800}
-                height={600}
-                className="rounded-2xl shadow-lg w-full object-cover"
-              />
-              {/* Trust badge */}
-              <div className="absolute bottom-4 left-4 bg-card/95 backdrop-blur rounded-xl p-3 shadow-md border border-border">
-                <p className="text-[10px] font-bold text-primary uppercase tracking-wider">Government Trust</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Over 4.5 Lakh beneficiaries supported since inception</p>
+
+              {/* Quick Links */}
+              <div className="border border-border rounded-lg overflow-hidden">
+                <div className="bg-muted px-4 py-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-foreground uppercase tracking-wide">
+                    <ExternalLink className="h-4 w-4 text-primary" />
+                    Quick Links
+                  </h3>
+                </div>
+                <ul className="divide-y divide-border">
+                  {quickLinks.map((link) => (
+                    <li key={link.label}>
+                      <Link to={link.to} className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-muted/60 transition-colors">
+                        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+
+            {/* CENTER — Hero Carousel */}
+            <div className="order-1 lg:order-2">
+              <div className="relative rounded-2xl overflow-hidden bg-foreground/90 aspect-[16/9] lg:aspect-auto lg:h-[420px]">
+                <img
+                  src={heroIllustration}
+                  alt="TGCMFC community empowerment"
+                  className="absolute inset-0 w-full h-full object-cover opacity-40"
+                />
+                {/* Overlay content */}
+                <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent">
+                  <span className="inline-block w-fit text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded bg-primary text-primary-foreground mb-3">
+                    {slide.tag}
+                  </span>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-background leading-tight">
+                    {slide.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-background/80 max-w-lg leading-relaxed">
+                    {slide.desc}
+                  </p>
+                </div>
+                {/* Nav arrows */}
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/20 backdrop-blur flex items-center justify-center hover:bg-background/40 transition-colors"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="h-5 w-5 text-background" />
+                </button>
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/20 backdrop-blur flex items-center justify-center hover:bg-background/40 transition-colors"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="h-5 w-5 text-background" />
+                </button>
+                {/* Dots */}
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                  {heroSlides.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentSlide(i)}
+                      className={`h-2 rounded-full transition-all ${i === currentSlide ? "w-6 bg-primary" : "w-2 bg-background/50"}`}
+                      aria-label={`Go to slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
+
+            {/* RIGHT SIDEBAR — Officials */}
+            <aside className="space-y-6 order-3 hidden lg:block">
+              {officials.map((official) => (
+                <div key={official.name} className="text-center border border-border rounded-lg p-4">
+                  <div className="mx-auto mb-3 h-20 w-20 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-primary/30 flex items-center justify-center text-2xl font-bold text-primary">
+                    {official.name.split(" ").pop()?.charAt(0)}
+                  </div>
+                  <h4 className="text-sm font-bold text-foreground">{official.name}</h4>
+                  <p className="text-[10px] font-semibold text-primary uppercase tracking-wider mt-1 leading-tight">
+                    {official.designation}
+                  </p>
+                </div>
+              ))}
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-10 border-y border-border bg-card">
+      {/* ===== STATS BAR ===== */}
+      <section className="py-5 gov-gradient">
         <div className="container">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-primary-foreground">
             {[
-              { icon: Users, value: "4,46,077+", label: "Beneficiaries" },
-              { icon: FileText, value: "13+", label: "Active Schemes" },
-              { icon: Shield, value: "33", label: "Districts Covered" },
-              { icon: CreditCard, value: "₹850 Cr", label: "Funds Disbursed" },
+              { value: "4.46L", label: "BENEFICIARIES SERVED" },
+              { value: "14", label: "ACTIVE SCHEMES" },
+              { value: "₹850Cr+", label: "CRORES DISBURSED" },
+              { value: "33", label: "DISTRICTS COVERED" },
             ].map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center text-center gap-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                  <stat.icon className="h-6 w-6 text-primary" />
-                </div>
-                <span className="text-2xl md:text-3xl font-bold text-foreground">{stat.value}</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wide font-medium">{stat.label}</span>
+              <div key={stat.label}>
+                <p className="text-2xl md:text-3xl font-extrabold">{stat.value}</p>
+                <p className="text-[10px] md:text-xs font-semibold uppercase tracking-widest mt-1 opacity-80">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Essential Services */}
-      <section className="section-padding">
+      {/* ===== SCHEMES + DOWNLOADS ===== */}
+      <section className="section-padding bg-background">
         <div className="container">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">Essential Services</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {essentialServices.map((service) => (
-              <Link key={service.label} to={service.to}>
-                <Card className="h-full transition-all hover:shadow-lg hover:-translate-y-1 cursor-pointer border-border">
-                  <CardContent className="p-6 text-center">
-                    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
-                      <service.icon className="h-7 w-7 text-primary" />
-                    </div>
-                    <h3 className="font-semibold text-card-foreground">{service.label}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{service.desc}</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Financial & Welfare Schemes */}
-      <section className="section-padding bg-muted/40">
-        <div className="container">
-          <div className="flex items-start justify-between mb-2">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-8">
+            {/* Schemes */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold">Financial & Welfare Schemes</h2>
-              <p className="text-muted-foreground mt-1">Tailored programs to support education, skill-building, and livelihoods.</p>
-            </div>
-            <Link to="/schemes" className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline whitespace-nowrap mt-1">
-              View All Schemes <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 mt-8">
-            {schemeCategories.map((scheme) => (
-              <Card key={scheme.label} className="h-full transition-all hover:shadow-lg hover:-translate-y-1 border-border">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                      <scheme.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-accent/20 text-accent-foreground">
-                      {scheme.status}
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-card-foreground mb-2">{scheme.label}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{scheme.desc}</p>
-                  <Link to="/apply">
-                    <Button variant="outline" size="sm" className="w-full">Apply Now</Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <Link to="/schemes" className="sm:hidden flex items-center justify-center gap-1 mt-6 text-sm font-medium text-primary hover:underline">
-            View All Schemes <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* Find the Right Scheme - Eligibility Checker CTA */}
-      <section className="py-16 md:py-20 gov-gradient text-primary-foreground">
-        <div className="container text-center">
-          <h2 className="text-2xl md:text-3xl font-bold">Find the Right Scheme for You</h2>
-          <p className="mt-2 opacity-90">Answer 3 simple questions to see your eligible benefits.</p>
-          <div className="mt-8 mx-auto max-w-2xl bg-card rounded-2xl p-6 shadow-xl">
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div className="text-left">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Monthly Income</label>
-                <select className="mt-1 w-full rounded-lg border border-border bg-background text-foreground px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:outline-none">
-                  <option>Below ₹10,000</option>
-                  <option>₹10,000 - ₹25,000</option>
-                  <option>₹25,000 - ₹50,000</option>
-                  <option>Above ₹50,000</option>
-                </select>
-              </div>
-              <div className="text-left">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Your Age Group</label>
-                <select className="mt-1 w-full rounded-lg border border-border bg-background text-foreground px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:outline-none">
-                  <option>18 - 25 years</option>
-                  <option>25 - 35 years</option>
-                  <option>35 - 50 years</option>
-                  <option>Above 50 years</option>
-                </select>
-              </div>
-              <div className="flex items-end">
-                <Link to="/schemes" className="w-full">
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                    Check Eligibility
-                  </Button>
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-xl md:text-2xl font-bold text-foreground flex items-center gap-2">
+                  <span className="inline-block w-1 h-7 bg-primary rounded-full" />
+                  TG CMFC Schemes
+                </h2>
+                <Link to="/schemes" className="text-sm font-medium text-foreground hover:text-primary transition-colors underline underline-offset-4">
+                  View All Schemes
                 </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Latest News & Announcements */}
-      <section className="section-padding">
-        <div className="container">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">Latest News & Announcements</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {latestNews.map((item) => (
-              <Card key={item.id} className="overflow-hidden transition-shadow hover:shadow-lg border-border">
-                <div className="h-48 bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">News Image</span>
-                </div>
-                <CardContent className="p-5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{new Date(item.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
-                  <h3 className="mt-2 font-semibold leading-snug text-card-foreground">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{item.excerpt}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link to="/media">
-              <Button variant="outline">View All News</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Leading the Vision - Officials */}
-      <section className="section-padding bg-muted/30">
-        <div className="container">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">Leading the Vision</h2>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
-            {officials.map((official) => (
-              <div key={official.name} className="text-center">
-                <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-4 border-primary/20 text-3xl font-bold text-primary">
-                  {official.name.split(" ").pop()?.charAt(0)}
-                </div>
-                <h3 className="font-bold text-foreground">{official.name}</h3>
-                <p className="text-xs font-semibold text-primary uppercase tracking-wider mt-1">{official.designation}</p>
-                {official.quote && (
-                  <p className="mt-3 text-sm text-muted-foreground italic leading-relaxed">
-                    "{official.quote}"
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Lives Transformed - Testimonial */}
-      <section className="section-padding bg-muted/60">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground">Lives Transformed by TGCMFC</h2>
-              <Card className="mt-6 border-border">
-                <CardContent className="p-6">
-                  <p className="text-muted-foreground leading-relaxed italic">
-                    "The Overseas Education Grant helped me pursue my Master's in Data Science in the UK. I am now working at a top tech firm and supporting my family back in Medak."
-                  </p>
-                  <div className="mt-4 flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">A</div>
-                    <div>
-                      <p className="font-semibold text-sm text-foreground">Anish Kumar</p>
-                      <p className="text-xs text-muted-foreground">• Medak District</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <div className="flex gap-2 mt-4">
-                <button className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="Previous">
-                  <ChevronLeft className="h-5 w-5 text-muted-foreground" />
-                </button>
-                <button className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="Next">
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </button>
+              <div className="grid gap-5 sm:grid-cols-2">
+                {schemeCards.map((scheme) => (
+                  <Card key={scheme.title} className="border-border hover:shadow-lg transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mb-4">
+                        <scheme.icon className="h-6 w-6 text-foreground/70" />
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground mb-2">{scheme.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{scheme.desc}</p>
+                      <Link to="/apply" className="inline-flex items-center gap-1 text-sm font-bold text-foreground uppercase tracking-wide hover:text-primary transition-colors">
+                        APPLY NOW <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
-            <div className="relative hidden lg:block">
-              <div className="aspect-video rounded-2xl bg-muted flex items-center justify-center">
-                <div className="h-16 w-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg cursor-pointer hover:bg-primary transition-colors">
-                  <Play className="h-7 w-7 text-primary-foreground ml-1" />
+
+            {/* Downloads Sidebar */}
+            <aside className="hidden lg:block">
+              <div className="border border-border rounded-lg overflow-hidden sticky top-24">
+                <div className="bg-muted px-4 py-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-foreground uppercase tracking-wide">
+                    <Download className="h-4 w-4 text-primary" />
+                    Downloads
+                  </h3>
                 </div>
+                <ul className="divide-y divide-border">
+                  {downloads.map((item) => (
+                    <li key={item.label}>
+                      <a href={item.href} className="flex items-center justify-between px-4 py-3 text-sm text-foreground hover:bg-muted/60 transition-colors">
+                        {item.label}
+                        <FileText className="h-4 w-4 text-primary" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
-
-      {/* Quick Links Bar */}
-      <section className="py-4 border-t border-border bg-card">
-        <div className="container">
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {["TGSCHEMES", "Online Portal", "ePASS", "Scholarship Hub", "Tenders", "Residential Schools", "RTI", "Right to Info"].map((link) => (
-              <a key={link} href="#" className="hover:text-primary transition-colors py-2">{link}</a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Floating chatbot button */}
-      <button
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow"
-        aria-label="Open chatbot"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </button>
     </Layout>
   );
 };
