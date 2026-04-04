@@ -10,46 +10,57 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { schemes } from "@/data/mockData";
+import { useTranslation } from "react-i18next";
 
-const stepLabels = ["Eligibility", "Personal", "Documents", "Review"];
+
 
 interface UploadedFile {
   name: string;
   size: string;
 }
 
-const TrusteeGuide = () => (
-  <div className="space-y-3">
-    <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4">
-      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
-        T
+const TrusteeGuide = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4">
+        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
+          T
+        </div>
+        <div>
+          <p className="font-semibold text-primary text-sm">{t("apply_trustee_guide")}</p>
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{t("apply_trustee_subtitle")}</p>
+        </div>
       </div>
-      <div>
-        <p className="font-semibold text-primary text-sm">Trustee Guide</p>
-        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Assisting your journey</p>
+      <div className="space-y-1">
+        <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left">
+          <Info className="h-4 w-4 text-primary" />
+          <span className="text-sm font-medium">{t("apply_instructions")}</span>
+        </button>
+        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+          <Lightbulb className="h-4 w-4 text-accent" />
+          <span className="text-sm font-medium">{t("apply_protips")}</span>
+        </button>
+        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
+          <Phone className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">{t("apply_helpline")}</span>
+        </button>
       </div>
+      <Button variant="outline" className="w-full mt-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+        <Phone className="h-4 w-4 mr-2" /> {t("apply_call_support")}
+      </Button>
     </div>
-    <div className="space-y-1">
-      <button className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left">
-        <Info className="h-4 w-4 text-primary" />
-        <span className="text-sm font-medium">Instructions</span>
-      </button>
-      <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
-        <Lightbulb className="h-4 w-4 text-accent" />
-        <span className="text-sm font-medium">Pro-tips</span>
-      </button>
-      <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
-        <Phone className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Helpline</span>
-      </button>
-    </div>
-    <Button variant="outline" className="w-full mt-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-      <Phone className="h-4 w-4 mr-2" /> Call Support
-    </Button>
-  </div>
-);
+  );
+};
 
 const Apply = () => {
+  const { t } = useTranslation();
+  const stepLabels = [
+    t("apply_step_eligibility"),
+    t("apply_step_personal"),
+    t("apply_step_documents"),
+    t("apply_step_review")
+  ];
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [certified, setCertified] = useState(false);
@@ -120,7 +131,7 @@ const Apply = () => {
         {/* Step nav header */}
         <header className="bg-card border-b border-border">
           <div className="container flex items-center justify-between py-4">
-            <Link to="/" className="font-extrabold text-foreground tracking-tight">TGCMFC MODERN TRUSTEE</Link>
+            <Link to="/" className="font-extrabold text-foreground tracking-tight">{t("apply_brand")}</Link>
             <nav className="hidden md:flex items-center gap-6">
               {stepLabels.map((label, i) => (
                 <span key={label} className={`text-sm font-medium ${i === 3 ? "text-primary border-b-2 border-primary pb-1" : "text-muted-foreground"}`}>
@@ -138,21 +149,21 @@ const Apply = () => {
         <div className="container py-12 max-w-3xl text-center">
           <div className="bg-card rounded-3xl p-8 md:p-12 shadow-sm">
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground border border-border rounded-full px-4 py-1.5 mb-6">
-              <CheckCircle2 className="h-3.5 w-3.5" /> Submission Complete
+              <CheckCircle2 className="h-3.5 w-3.5" /> {t("apply_success_badge")}
             </span>
 
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <Check className="h-8 w-8 text-green-600" />
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Application Submitted Successfully!</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("apply_success_title")}</h1>
             <p className="mt-4 text-muted-foreground max-w-md mx-auto">
-              We have received your application for the <strong className="text-foreground">Educational Scholarship Scheme</strong>. Our trustees will now begin the verification process. You can track your status anytime through your dashboard.
+              {t("apply_success_desc")}
             </p>
 
             {/* Reference Number */}
             <div className="mt-8 bg-muted/60 rounded-2xl p-6 border border-dashed border-border">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Reference Number</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{t("apply_reference_label")}</p>
               <div className="flex items-center justify-center gap-3">
                 <span className="text-2xl md:text-3xl font-extrabold text-primary tracking-wider">{applicationId}</span>
                 <button onClick={copyToClipboard} className="h-8 w-8 rounded-md bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="Copy">
@@ -165,11 +176,11 @@ const Apply = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <Link to="/grievance">
                 <Button size="lg" className="font-semibold min-w-[200px]">
-                  <Shield className="h-4 w-4 mr-2" /> Track Application
+                  <Shield className="h-4 w-4 mr-2" /> {t("apply_track_btn")}
                 </Button>
               </Link>
               <Button size="lg" variant="outline" className="font-semibold min-w-[200px] bg-accent/10 border-accent/30 text-foreground hover:bg-accent/20">
-                <Download className="h-4 w-4 mr-2" /> Download Receipt
+                <Download className="h-4 w-4 mr-2" /> {t("apply_download_btn")}
               </Button>
             </div>
           </div>
@@ -177,9 +188,9 @@ const Apply = () => {
           {/* Info cards */}
           <div className="grid sm:grid-cols-3 gap-4 mt-8">
             {[
-              { icon: Mail, title: "Email Sent", desc: "A copy of your receipt has been sent to your registered email address." },
-              { icon: FileText, title: "Verification", desc: "Standard processing time for verification is 7-10 working days." },
-              { icon: Bell, title: "Stay Alert", desc: "You will receive SMS updates at every stage of the approval process." },
+              { icon: Mail, title: t("apply_info_email_title"), desc: t("apply_info_email_desc") },
+              { icon: FileText, title: t("apply_info_verify_title"), desc: t("apply_info_verify_desc") },
+              { icon: Bell, title: t("apply_info_alert_title"), desc: t("apply_info_alert_desc") },
             ].map(card => (
               <div key={card.title} className="flex items-start gap-3 text-left bg-card rounded-xl p-4 border border-border">
                 <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
@@ -197,10 +208,10 @@ const Apply = () => {
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-between bg-card rounded-xl p-4 border border-border text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Lightbulb className="h-4 w-4 text-accent" />
-              <em>Pro-tip: Keep your Aadhaar linked to your bank account for direct benefit transfer.</em>
+              <em>{t("apply_protip")}</em>
             </div>
             <a href="tel:1800425XXXX" className="flex items-center gap-1 text-primary font-semibold hover:underline mt-2 sm:mt-0">
-              <Phone className="h-4 w-4" /> Need help? 1800-425-XXXX
+              <Phone className="h-4 w-4" /> {t("apply_need_help")}
             </a>
           </div>
         </div>
@@ -214,7 +225,7 @@ const Apply = () => {
       {/* Step nav header */}
       <header className="bg-card border-b border-border sticky top-0 z-50">
         <div className="container flex items-center justify-between py-4">
-          <Link to="/" className="font-extrabold text-foreground tracking-tight text-sm md:text-base">TGCMFC MODERN TRUSTEE</Link>
+          <Link to="/" className="font-extrabold text-foreground tracking-tight text-sm md:text-base">{t("apply_brand")}</Link>
           <nav className="hidden md:flex items-center gap-6">
             {stepLabels.map((label, i) => (
               <button
@@ -246,7 +257,7 @@ const Apply = () => {
             <div key={i} className={`h-1 flex-1 rounded-full ${i <= currentStep ? "bg-primary" : "bg-muted"}`} />
           ))}
         </div>
-        <p className="text-xs text-muted-foreground mt-1.5">Step {currentStep + 1} of 4: {stepLabels[currentStep]}</p>
+        <p className="text-xs text-muted-foreground mt-1.5">{t("apply_step_indicator", { step: currentStep + 1, label: stepLabels[currentStep] })}</p>
       </div>
 
       {/* Content */}
@@ -257,16 +268,16 @@ const Apply = () => {
             {/* Step 0: Eligibility */}
             {currentStep === 0 && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Eligibility Check</h1>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("apply_eligibility_title")}</h1>
                 <p className="mt-2 text-muted-foreground">
-                  The first step in your journey toward financial empowerment. Let's verify your status for the TGCMFC Modern Trustee scheme.
+                  {t("apply_eligibility_desc")}
                 </p>
 
                 <Card className="mt-6">
                   <CardContent className="p-6 space-y-8">
                     {/* Christian minority */}
                     <div>
-                      <p className="font-semibold text-foreground mb-3">Are you a Christian minority?</p>
+                      <p className="font-semibold text-foreground mb-3">{t("apply_christian_question")}</p>
                       <div className="grid grid-cols-2 gap-3">
                         <button
                           onClick={() => setIsChristian(true)}
@@ -276,7 +287,7 @@ const Apply = () => {
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
                           }`}
                         >
-                          {isChristian === true && <Check className="h-4 w-4" />} Yes
+                          {isChristian === true && <Check className="h-4 w-4" />} {t("apply_yes")}
                         </button>
                         <button
                           onClick={() => setIsChristian(false)}
@@ -286,14 +297,14 @@ const Apply = () => {
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
                           }`}
                         >
-                          No
+                          {t("apply_no")}
                         </button>
                       </div>
                     </div>
 
                     {/* Age range */}
                     <div>
-                      <p className="font-semibold text-foreground mb-3">What is your age range?</p>
+                      <p className="font-semibold text-foreground mb-3">{t("apply_age_question")}</p>
                       <div className="relative">
                         <select
                           value={ageRange}
@@ -311,17 +322,17 @@ const Apply = () => {
 
                     {/* Income range */}
                     <div>
-                      <p className="font-semibold text-foreground mb-3">What is your annual income range?</p>
+                      <p className="font-semibold text-foreground mb-3">{t("apply_income_question")}</p>
                       <div className="relative">
                         <select
                           value={incomeRange}
                           onChange={(e) => setIncomeRange(e.target.value)}
                           className="w-full h-12 rounded-xl bg-muted text-foreground px-4 text-sm appearance-none focus:ring-2 focus:ring-primary focus:outline-none border-0"
                         >
-                          <option value="below-1l">Below 1 Lakh</option>
-                          <option value="1l-2.5l">₹1 - 2.5 Lakhs</option>
-                          <option value="2.5l-5l">₹2.5 - 5 Lakhs</option>
-                          <option value="above-5l">Above 5 Lakhs</option>
+                          <option value="below-1l">{t("apply_income_below_1l")}</option>
+                          <option value="1l-2.5l">{t("apply_income_1l_2.5l")}</option>
+                          <option value="2.5l-5l">{t("apply_income_2.5l_5l")}</option>
+                          <option value="above-5l">{t("apply_income_above_5l")}</option>
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                       </div>
@@ -333,10 +344,10 @@ const Apply = () => {
                         <CheckCircle2 className={`h-8 w-8 ${isEligible ? "text-green-600" : "text-destructive"}`} />
                         <div>
                           <p className={`font-bold ${isEligible ? "text-green-800" : "text-destructive"}`}>
-                            {isEligible ? "Eligible!" : "Not Eligible"}
+                            {isEligible ? t("apply_eligible_title") : t("apply_not_eligible_title")}
                           </p>
                           <p className={`text-sm ${isEligible ? "text-green-700" : "text-destructive/80"}`}>
-                            {isEligible ? "You meet the core criteria for this trustee program." : "This scheme is for Christian minorities only."}
+                            {isEligible ? t("apply_eligible_desc") : t("apply_not_eligible_desc")}
                           </p>
                         </div>
                       </div>
@@ -349,21 +360,21 @@ const Apply = () => {
             {/* Step 1: Personal Details */}
             {currentStep === 1 && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Personal Details</h1>
-                <p className="mt-2 text-muted-foreground">Step 2 of 4: Provide your identification and residency information.</p>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("apply_personal_title")}</h1>
+                <p className="mt-2 text-muted-foreground">{t("apply_personal_desc")}</p>
 
                 <Card className="mt-6">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="font-bold text-foreground">Applicant Information</h3>
+                      <h3 className="font-bold text-foreground">{t("apply_applicant_info")}</h3>
                       <span className="text-xs text-accent flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-accent" /> AUTO-SAVE: LAST SAVED 2 MINUTES AGO
+                        <span className="h-2 w-2 rounded-full bg-accent" /> {t("apply_autosave")}
                       </span>
                     </div>
 
                     <div className="space-y-5">
                       <div>
-                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Full Name (As per Aadhaar)</label>
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_fullname_label")}</label>
                         <Input
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
@@ -374,7 +385,7 @@ const Apply = () => {
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Mobile Number</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_mobile_label")}</label>
                           <div className="relative mt-1.5">
                             <Input
                               value={mobile}
@@ -383,43 +394,43 @@ const Apply = () => {
                               className="h-12 bg-muted border-0 rounded-xl pr-20"
                             />
                             <button className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-md">
-                              VERIFY
+                              {t("apply_verify_btn")}
                             </button>
                           </div>
-                          <p className="text-[11px] text-muted-foreground mt-1 italic">Enter 10-digit mobile number for OTP</p>
+                          <p className="text-[11px] text-muted-foreground mt-1 italic">{t("apply_mobile_hint")}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Aadhaar Number</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_aadhaar_label")}</label>
                           <Input
                             value={aadhaar}
                             onChange={(e) => setAadhaar(e.target.value)}
                             placeholder="XXXX XXXX XXXX"
                             className="mt-1.5 h-12 bg-muted border-0 rounded-xl"
                           />
-                          <p className="text-[11px] text-muted-foreground mt-1 italic">Unique 12-digit identification</p>
+                          <p className="text-[11px] text-muted-foreground mt-1 italic">{t("apply_aadhaar_hint")}</p>
                         </div>
                       </div>
 
                       <div>
-                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Permanent Address</label>
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_address_label")}</label>
                         <Textarea
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
-                          placeholder="House No, Street, Landmark..."
+                          placeholder={t("apply_address_placeholder")}
                           className="mt-1.5 bg-muted border-0 rounded-xl min-h-[80px]"
                         />
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">District</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_district_label")}</label>
                           <div className="relative mt-1.5">
                             <select
                               value={district}
                               onChange={(e) => setDistrict(e.target.value)}
                               className="w-full h-12 rounded-xl bg-muted text-foreground px-4 text-sm appearance-none focus:ring-2 focus:ring-primary focus:outline-none border-0"
                             >
-                              <option value="">Select District</option>
+                              <option value="">{t("apply_district_placeholder")}</option>
                               {["Hyderabad", "Rangareddy", "Medchal-Malkajgiri", "Warangal Urban", "Karimnagar", "Khammam", "Nizamabad", "Adilabad", "Nalgonda", "Mahabubnagar"].map(d => (
                                 <option key={d} value={d}>{d}</option>
                               ))}
@@ -428,7 +439,7 @@ const Apply = () => {
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date of Birth</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("apply_dob_label")}</label>
                           <Input
                             type="date"
                             value={dob}
@@ -446,23 +457,23 @@ const Apply = () => {
             {/* Step 2: Document Upload */}
             {currentStep === 2 && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Document Upload</h1>
-                <p className="mt-2 text-muted-foreground">Step 3 of 4: Please provide authentic digital copies of your credentials.</p>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("apply_docs_title")}</h1>
+                <p className="mt-2 text-muted-foreground">{t("apply_docs_desc")}</p>
 
                 <Card className="mt-6">
                   <CardContent className="p-6">
                     {/* Format notice */}
                     <div className="bg-accent/10 rounded-xl p-4 flex items-center gap-3 mb-6">
                       <Info className="h-5 w-5 text-accent shrink-0" />
-                      <p className="text-sm text-foreground">Accepted file formats: PDF, JPG, PNG (Max 5MB per file)</p>
+                      <p className="text-sm text-foreground">{t("apply_docs_format")}</p>
                     </div>
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       {[
-                        { key: "aadhaar", label: "Aadhaar (Card)", icon: Upload, hint: "Drag & Drop or Click to upload" },
-                        { key: "income", label: "Income Certificate", icon: FileText, hint: "PDF or JPG only" },
-                        { key: "community", label: "Community Certificate", icon: Upload, hint: "Click to browse files" },
-                        { key: "photo", label: "Passport-sized Photo", icon: Camera, hint: "JPG or PNG only" },
+                        { key: "aadhaar", label: t("apply_doc_aadhaar"), icon: Upload, hint: t("apply_doc_hint_upload") },
+                        { key: "income", label: t("apply_doc_income"), icon: FileText, hint: t("apply_doc_hint_pdf_jpg") },
+                        { key: "community", label: t("apply_doc_community"), icon: Upload, hint: t("apply_doc_hint_browse") },
+                        { key: "photo", label: t("apply_doc_photo"), icon: Camera, hint: t("apply_doc_hint_photo") },
                       ].map(doc => (
                         <div key={doc.key}>
                           <p className="font-semibold text-foreground mb-2">{doc.label}</p>
@@ -493,9 +504,9 @@ const Apply = () => {
                     {/* Upload status indicators */}
                     <div className="grid grid-cols-3 gap-3 mt-6">
                       {[
-                        { color: "bg-green-100 text-green-700", icon: CheckCircle2, label: "Verified" },
-                        { color: "bg-accent/10 text-accent", icon: FileCheck, label: "Pending" },
-                        { color: "bg-primary/10 text-primary", icon: Upload, label: "Upload" },
+                        { color: "bg-green-100 text-green-700", icon: CheckCircle2, label: t("apply_status_verified") },
+                        { color: "bg-accent/10 text-accent", icon: FileCheck, label: t("apply_status_pending") },
+                        { color: "bg-primary/10 text-primary", icon: Upload, label: t("apply_status_upload") },
                       ].map(status => (
                         <div key={status.label} className={`${status.color} rounded-lg p-3 flex items-center gap-2 text-xs font-semibold`}>
                           <status.icon className="h-4 w-4" />
@@ -511,9 +522,9 @@ const Apply = () => {
             {/* Step 3: Review & Submit */}
             {currentStep === 3 && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Review & Submit</h1>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("apply_review_title")}</h1>
                 <p className="mt-2 text-muted-foreground">
-                  Please review all your details carefully before final submission. Once submitted, your application will enter the verification phase.
+                  {t("apply_review_desc")}
                 </p>
 
                 <Card className="mt-6">
@@ -522,31 +533,31 @@ const Apply = () => {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="font-bold text-foreground flex items-center gap-2">
-                          <span className="h-5 w-1 bg-primary rounded-full" /> Personal Details
+                          <span className="h-5 w-1 bg-primary rounded-full" /> {t("apply_review_personal")}
                         </h3>
                         <button onClick={() => setCurrentStep(1)} className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
-                          EDIT ✏️
+                          {t("apply_review_edit")} ✏️
                         </button>
                       </div>
                       <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
                         <div>
-                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Full Name</p>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{t("apply_review_fullname")}</p>
                           <p className="text-foreground font-medium mt-0.5">{fullName || "—"}</p>
                         </div>
                         <div>
-                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Mobile Number</p>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{t("apply_review_mobile")}</p>
                           <p className="text-foreground font-medium mt-0.5">{mobile ? `+91 ${mobile}` : "—"}</p>
                         </div>
                         <div>
-                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Aadhaar Number</p>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{t("apply_review_aadhaar")}</p>
                           <p className="text-foreground font-medium mt-0.5">{aadhaar ? `XXXX XXXX ${aadhaar.slice(-4)}` : "—"}</p>
                         </div>
                         <div>
-                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Date of Birth</p>
-                          <p className="text-foreground font-medium mt-0.5">{dob ? new Date(dob).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "—"}</p>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{t("apply_review_dob")}</p>
+                          <p className="text-foreground font-medium mt-0.5">{dob ? new Date(dob).toLocaleDateString(t("common_lang_code"), { day: "numeric", month: "long", year: "numeric" }) : "—"}</p>
                         </div>
                         <div className="sm:col-span-2">
-                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Residential Address</p>
+                          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{t("apply_review_address")}</p>
                           <p className="text-foreground font-medium mt-0.5">{address || "—"}{district ? `, ${district}, Telangana` : ""}</p>
                         </div>
                       </div>
@@ -558,10 +569,10 @@ const Apply = () => {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="font-bold text-foreground flex items-center gap-2">
-                          <span className="h-5 w-1 bg-primary rounded-full" /> Documents
+                          <span className="h-5 w-1 bg-primary rounded-full" /> {t("apply_review_docs")}
                         </h3>
                         <button onClick={() => setCurrentStep(2)} className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
-                          EDIT ✏️
+                          {t("apply_review_edit")} ✏️
                         </button>
                       </div>
                       <div className="grid sm:grid-cols-3 gap-3">
@@ -595,9 +606,9 @@ const Apply = () => {
                         className="mt-0.5"
                       />
                       <div>
-                        <p className="font-semibold text-sm text-foreground">I certify that all the information provided is correct.</p>
+                        <p className="font-semibold text-sm text-foreground">{t("apply_certify_label")}</p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          I understand that any false information may lead to the rejection of my application and potential legal action under corporate bylaws.
+                          {t("apply_certify_desc")}
                         </p>
                       </div>
                     </div>
@@ -614,12 +625,12 @@ const Apply = () => {
 
               {currentStep === 3 && (
                 <div className="mt-4 bg-muted rounded-xl p-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Submission Tip</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{t("apply_submission_tip_title")}</p>
                   <p className="text-sm text-foreground">
-                    Ensure your Aadhaar is linked to the mobile number provided to receive the final OTP confirmation.
+                    {t("apply_submission_tip_desc")}
                   </p>
                   <Button variant="outline" size="sm" className="w-full mt-3 uppercase tracking-wider text-xs font-bold">
-                    Call Support
+                    {t("apply_call_support")}
                   </Button>
                 </div>
               )}
@@ -636,13 +647,13 @@ const Apply = () => {
             disabled={currentStep === 0}
             className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-40 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" /> BACK
+            <ArrowLeft className="h-4 w-4" /> {t("apply_back")}
           </button>
 
           <button className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-foreground transition-colors">
             <Save className="h-5 w-5" />
             <span className="text-[10px] font-bold uppercase tracking-wider">
-              {currentStep === 3 ? "Save" : "Save Progress"}
+              {currentStep === 3 ? t("apply_save_short") : t("apply_save")}
             </span>
           </button>
 
@@ -652,7 +663,7 @@ const Apply = () => {
               disabled={!canProceed()}
               className="min-w-[200px] font-semibold"
             >
-              NEXT: {stepLabels[currentStep + 1]?.toUpperCase()} <ArrowRight className="ml-2 h-4 w-4" />
+              {t("apply_next_prefix")} {stepLabels[currentStep + 1]?.toUpperCase()} <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
             <Button
@@ -660,7 +671,7 @@ const Apply = () => {
               disabled={!certified}
               className="min-w-[200px] font-semibold"
             >
-              FINAL SUBMIT <ArrowRight className="ml-2 h-4 w-4" />
+              {t("apply_final_submit")} <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
         </div>

@@ -1,22 +1,36 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, Globe } from "lucide-react";
+import { Menu, X, Phone, Globe, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { languages } from "@/i18n/translations";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const navLinks = [
-  { to: "/", label: "HOME" },
-  { to: "/about", label: "ABOUT US" },
-  { to: "/schemes", label: "SCHEMES" },
-  { to: "/apply", label: "APPLY" },
-  { to: "/grievance", label: "GRIEVANCE" },
-  { to: "/media", label: "MEDIA" },
-  { to: "/contact", label: "CONTACT US" },
-];
+
+const logo = "/assets/images/logo.png";
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [fontSize, setFontSize] = useState(16);
   const location = useLocation();
+
+  const navLinks = [
+    { to: "/", label: t("nav_home") },
+    { to: "/about", label: t("nav_about") },
+    { to: "/schemes", label: t("nav_schemes") },
+    { to: "/apply", label: t("nav_apply") },
+    { to: "/grievance", label: t("nav_grievance") },
+    { to: "/media", label: t("nav_media") },
+    { to: "/contact", label: t("nav_contact") },
+  ];
+
+  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   const changeFontSize = (delta: number) => {
     const next = Math.max(14, Math.min(20, fontSize + delta));
@@ -30,14 +44,14 @@ const Header = () => {
       <div className="gov-gradient text-primary-foreground">
         <div className="container flex items-center justify-between py-1.5 text-[11px] md:text-xs font-medium">
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1">🏛 GOVERNMENT OF TELANGANA</span>
+            <span className="flex items-center gap-1">🏛 {t("header_govt_telangana")}</span>
             <span className="hidden sm:inline">|</span>
             <span className="hidden sm:flex items-center gap-1">
-              <Globe className="h-3 w-3" /> TG-CMFC OFFICIAL PORTAL
+              <Globe className="h-3 w-3" /> {t("header_portal_title")}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden md:inline">Screen Reader Access</span>
+            <span className="hidden md:inline">{t("header_screen_reader")}</span>
             <span className="hidden md:inline">|</span>
             <div className="hidden md:flex items-center gap-1">
               <button onClick={() => changeFontSize(-1)} className="hover:opacity-80 font-bold">A-</button>
@@ -45,7 +59,24 @@ const Header = () => {
               <button onClick={() => changeFontSize(1)} className="hover:opacity-80 font-bold">A+</button>
             </div>
             <span className="hidden md:inline">|</span>
-            <span className="text-accent">English</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-auto py-0 px-1 text-accent hover:text-accent font-bold gap-1">
+                  {currentLanguage.nativeName} <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="max-h-64 overflow-y-auto">
+                {languages.map((lang) => (
+                  <DropdownMenuItem 
+                    key={lang.code}
+                    onClick={() => i18n.changeLanguage(lang.code)}
+                    className={i18n.language === lang.code ? "bg-accent text-accent-foreground font-bold" : ""}
+                  >
+                    {lang.nativeName} ({lang.name})
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
@@ -54,15 +85,25 @@ const Header = () => {
       <div className="container py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 border-2 border-primary/30 text-primary font-extrabold text-xl">
-              T
+            <div className="relative h-14 w-14 flex items-center justify-center rounded-full bg-white border-2 border-primary/20 overflow-hidden shadow-sm">
+              <img 
+                src={logo} 
+                alt="Government of Telangana Logo" 
+                className="h-full w-full object-contain p-2"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement!.innerText = 'T';
+                  target.parentElement!.classList.add('bg-primary/10', 'text-primary', 'font-extrabold', 'text-xl');
+                }}
+              />
             </div>
             <div>
-              <h1 className="text-base md:text-lg font-extrabold text-foreground leading-tight">
-                Telangana Christian (Minorities) Finance Corporation
+              <h1 className="text-base md:text-lg font-extrabold text-foreground leading-tight uppercase">
+                {t("header_govt")} - {t("header_corp_name")}
               </h1>
               <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider">
-                Minorities Welfare Department, Government of Telangana
+                {t("header_dept_name")}, {t("header_govt")}
               </p>
             </div>
           </Link>
@@ -70,16 +111,34 @@ const Header = () => {
           {/* Officials thumbnails (desktop) */}
           <div className="hidden xl:flex items-center gap-5">
             {[
-              { name: "Sri A. Revanth Reddy", title: "HON'BLE CHIEF MINISTER" },
-              { name: "Sri Mohammed Ali", title: "HON'BLE MINISTER FOR MW" },
+              { 
+                name: t("header_official_cm_name"), 
+                title: t("header_official_cm_title"),
+                photo: "/assets/images/cm.png" 
+              },
+              { 
+                name: t("header_official_min_name"), 
+                title: t("header_official_min_title"),
+                photo: "/assets/images/minister.png" 
+              },
             ].map((person) => (
               <div key={person.name} className="flex items-center gap-2 text-right">
                 <div>
                   <p className="text-xs font-semibold text-foreground">{person.name}</p>
                   <p className="text-[9px] text-muted-foreground uppercase tracking-wider">{person.title}</p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-muted border border-border flex items-center justify-center text-sm font-bold text-primary">
-                  {person.name.split(" ").pop()?.charAt(0)}
+                <div className="h-12 w-12 rounded-full bg-muted border border-border flex items-center justify-center text-sm font-bold text-primary overflow-hidden">
+                  <img 
+                    src={person.photo} 
+                    alt={person.name} 
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const initials = person.name.includes(" ") ? person.name.split(" ").pop()?.charAt(0) : person.name.charAt(0);
+                      target.parentElement!.innerText = initials || "";
+                    }}
+                  />
                 </div>
               </div>
             ))}
@@ -137,7 +196,7 @@ const Header = () => {
               </Link>
             ))}
             <Link to="/apply" onClick={() => setMobileOpen(false)}>
-              <Button className="w-full mt-2">Apply Now</Button>
+              <Button className="w-full mt-2">{t("nav_apply_now")}</Button>
             </Link>
           </div>
         </nav>

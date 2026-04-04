@@ -7,17 +7,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Layout from "@/components/layout/Layout";
 import { officials } from "@/data/mockData";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t } = useTranslation();
   return (
     <Layout>
       {/* Hero */}
       <section className="bg-background border-b border-border">
         <div className="container py-10 md:py-16">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Home &gt; About</p>
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">About TGCMFC</h1>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{t("about_breadcrumb")}</p>
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">{t("about_hero_title")}</h1>
           <p className="text-muted-foreground max-w-2xl text-base md:text-lg">
-            Empowering minority communities through strategic financial support, education, and institutional welfare.
+            {t("about_hero_subtitle")}
           </p>
         </div>
       </section>
@@ -27,16 +29,16 @@ const About = () => {
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div>
-              <h2 className="text-2xl font-bold mb-4">Sovereign Mandate</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("about_mandate_title")}</h2>
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                The Telangana Christian Minorities Finance Corporation was established with a clear vision to act as a bridge between the state's resources and the Christian minority population.
+                {t("about_mandate_desc")}
               </p>
               <ul className="space-y-3">
                 {[
-                  "Implementation of socio-economic development schemes.",
-                  "Provision of educational loans and merit scholarships.",
-                  "Support for self-employment through bank-linked subsidies.",
-                  "Skill development training for minority youth.",
+                  t("about_mandate_item1", { defaultValue: "Implementation of socio-economic development schemes." }),
+                  t("about_mandate_item2", { defaultValue: "Provision of educational loans and merit scholarships." }),
+                  t("about_mandate_item3", { defaultValue: "Support for self-employment through bank-linked subsidies." }),
+                  t("about_mandate_item4", { defaultValue: "Skill development training for minority youth." }),
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
@@ -49,12 +51,12 @@ const About = () => {
               <div className="rounded-xl overflow-hidden bg-muted h-56 md:h-72 flex items-center justify-center">
                 <div className="text-center">
                   <Building className="h-16 w-16 text-muted-foreground/50 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">TGCMFC Building</p>
+                  <p className="text-sm text-muted-foreground">{t("about_building_label")}</p>
                 </div>
               </div>
               <div className="absolute bottom-4 right-4 bg-primary text-primary-foreground rounded-lg px-4 py-2 text-center">
-                <p className="text-lg font-bold">ESTD.</p>
-                <p className="text-xs">State Mandated Authority</p>
+                <p className="text-lg font-bold">{t("about_estd_label")}</p>
+                <p className="text-xs">{t("about_state_mandated")}</p>
               </div>
             </div>
           </div>
@@ -69,13 +71,13 @@ const About = () => {
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-3">
                   <Eye className="h-5 w-5 text-primary" />
-                  <h3 className="text-xl font-bold">Our Vision</h3>
+                  <h3 className="text-xl font-bold">{t("about_vision_title")}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  To foster an inclusive society where the Christian minority has equal access to educational and economic opportunities, ensuring dignity and sustainable growth for every citizen.
+                  {t("about_vision_desc")}
                 </p>
                 <button className="text-xs text-primary font-semibold uppercase tracking-wider hover:underline">
-                  Governing Objectives →
+                  {t("about_vision_link")}
                 </button>
               </CardContent>
             </Card>
@@ -83,13 +85,13 @@ const About = () => {
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-3">
                   <Target className="h-5 w-5 text-secondary" />
-                  <h3 className="text-xl font-bold">Our Mission</h3>
+                  <h3 className="text-xl font-bold">{t("about_mission_title")}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  To uplift and empower communities through welfare programs, financial subsidies for livelihoods, and high-impact educational scholarship programs across all 33 districts.
+                  {t("about_mission_desc")}
                 </p>
                 <button className="text-xs text-secondary font-semibold uppercase tracking-wider hover:underline">
-                  Operational Strategy →
+                  {t("about_mission_link")}
                 </button>
               </CardContent>
             </Card>
@@ -100,20 +102,29 @@ const About = () => {
       {/* Board of Trustees */}
       <section className="section-padding">
         <div className="container text-center">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Executive Stewardship</p>
-          <h2 className="text-2xl md:text-3xl font-bold mb-10">Board of Trustees</h2>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">{t("about_board_eyebrow")}</p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-10">{t("about_board_title")}</h2>
           <div className="grid gap-8 sm:grid-cols-3 max-w-3xl mx-auto">
-            {[
-              { name: "Sri. John Doe", title: "Chairman" },
-              { name: "Smt. Sarah Smith", title: "Managing Director, IAS" },
-              { name: "Sri. Rajesh Kumar", title: "Chief Accounts Officer" },
-            ].map((person) => (
+            {officials.map((person, i) => (
               <div key={person.name} className="flex flex-col items-center">
-                <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center text-3xl font-bold text-muted-foreground mb-4 border-4 border-background shadow-md">
-                  {person.name.charAt(5) || person.name.charAt(0)}
+                <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center text-3xl font-bold text-primary mb-4 border-4 border-background shadow-md overflow-hidden relative">
+                  {person.photo ? (
+                    <img 
+                      src={person.photo} 
+                      alt={person.name} 
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.parentElement!.innerText = person.name.split(" ").pop()?.charAt(0) || "";
+                      }}
+                    />
+                  ) : (
+                    <span>{t(`official_name_${i}`, { defaultValue: person.name }).split(" ").pop()?.charAt(0)}</span>
+                  )}
                 </div>
-                <h3 className="font-bold text-sm">{person.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{person.title}</p>
+                <h3 className="font-bold text-sm">{t(`official_name_${i}`, { defaultValue: person.name })}</h3>
+                <p className="text-xs text-muted-foreground mt-1">{t(`official_desig_${i}`, { defaultValue: person.designation })}</p>
               </div>
             ))}
           </div>
@@ -123,26 +134,30 @@ const About = () => {
       {/* Administrative Hierarchy */}
       <section className="py-16 bg-muted/30">
         <div className="container text-center max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">Administrative Hierarchy</h2>
-          <p className="text-sm text-muted-foreground mb-10">The formal structure of command and compliance</p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">{t("about_hierarchy_title")}</h2>
+          <p className="text-sm text-muted-foreground mb-10">{t("about_hierarchy_subtitle")}</p>
 
           <div className="flex flex-col items-center space-y-4">
             <div className="gov-gradient text-primary-foreground px-8 py-3 rounded-full font-semibold text-sm">
-              Government of Telangana
+              {t("about_hierarchy_govt")}
             </div>
             <div className="h-8 w-px bg-border" />
             <div className="border border-border px-6 py-2.5 rounded-full text-sm font-medium bg-background">
-              Minority Welfare Department
+              {t("about_hierarchy_mwd")}
             </div>
             <div className="h-8 w-px bg-border" />
             <div className="border-2 border-primary px-6 py-2.5 rounded-full text-sm font-semibold text-primary bg-background">
-              TGCMFC Board
+              {t("about_hierarchy_board")}
             </div>
             <div className="h-8 w-px bg-border" />
             <div className="flex flex-wrap justify-center gap-3">
-              {["District Minority Welfare Officers", "Admin & Accounting Wing", "Information & Communication"].map((role) => (
-                <div key={role} className="border border-border px-4 py-2 rounded-full text-xs font-medium bg-background">
-                  {role}
+              {[
+                { key: "about_hierarchy_dmwo", val: "District Minority Welfare Officers" },
+                { key: "about_hierarchy_admin", val: "Admin & Accounting Wing" },
+                { key: "about_hierarchy_ict", val: "Information & Communication" }
+              ].map((role) => (
+                <div key={role.key} className="border border-border px-4 py-2 rounded-full text-xs font-medium bg-background">
+                  {t(role.key, { defaultValue: role.val })}
                 </div>
               ))}
             </div>
@@ -156,28 +171,28 @@ const About = () => {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-extrabold leading-tight mb-4">
-                Quantifiable<br />Social Progress
+                {t("about_progress_title").split(" ").map((w,i)=><span key={i}>{w} {i===0&&<br/>}</span>)}
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                Our reach spans across the entire landscape of Telangana, touching lives in every administrative block.
+                {t("about_progress_desc")}
               </p>
               <Button className="gap-2 rounded-full">
-                View Detailed Annual Statistics <ArrowRight className="h-4 w-4" />
+                {t("about_progress_btn")} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-6">
               <Card className="text-center shadow-none">
                 <CardContent className="p-6">
                   <p className="text-4xl font-extrabold text-foreground">33</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">Districts Covered</p>
-                  <p className="text-xs text-muted-foreground mt-2">Full administrative coverage across Telangana</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{t("about_districts_label")}</p>
+                  <p className="text-xs text-muted-foreground mt-2">{t("about_districts_desc")}</p>
                 </CardContent>
               </Card>
               <Card className="text-center shadow-none">
                 <CardContent className="p-6">
                   <p className="text-4xl font-extrabold text-foreground">85k+</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">Beneficiaries</p>
-                  <p className="text-xs text-muted-foreground mt-2">Empowered through welfare programs</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{t("about_beneficiaries_label")}</p>
+                  <p className="text-xs text-muted-foreground mt-2">{t("about_beneficiaries_desc")}</p>
                 </CardContent>
               </Card>
             </div>
@@ -190,31 +205,31 @@ const About = () => {
         <div className="container max-w-4xl">
           <Card className="border-t-4 border-t-primary shadow-none">
             <CardContent className="p-6 md:p-8">
-              <h2 className="text-xl font-bold mb-1">Citizen's Charter</h2>
-              <p className="text-xs text-muted-foreground mb-6">Our commitment to time-based service delivery.</p>
+              <h2 className="text-xl font-bold mb-1">{t("about_charter_title")}</h2>
+              <p className="text-xs text-muted-foreground mb-6">{t("about_charter_subtitle")}</p>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-xs uppercase tracking-wider">Service Type</TableHead>
-                    <TableHead className="text-xs uppercase tracking-wider">Resolution Time</TableHead>
-                    <TableHead className="text-xs uppercase tracking-wider">Designated Officer</TableHead>
+                    <TableHead className="text-xs uppercase tracking-wider">{t("about_charter_col_service")}</TableHead>
+                    <TableHead className="text-xs uppercase tracking-wider">{t("about_charter_col_time")}</TableHead>
+                    <TableHead className="text-xs uppercase tracking-wider">{t("about_charter_col_officer")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="text-sm">Loan Application Processing</TableCell>
-                    <TableCell className="text-sm">15 Working Days</TableCell>
-                    <TableCell className="text-sm">Managing Director</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row1_service")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row1_time")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row1_officer")}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="text-sm">Grievance Redressal</TableCell>
-                    <TableCell className="text-sm">7 Working Days</TableCell>
-                    <TableCell className="text-sm">Public Relations Officer</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row2_service")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row2_time")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row2_officer")}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="text-sm">Scholarship Verification</TableCell>
-                    <TableCell className="text-sm">10 Working Days</TableCell>
-                    <TableCell className="text-sm">Accounts Section</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row3_service")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row3_time")}</TableCell>
+                    <TableCell className="text-sm">{t("about_charter_row3_officer")}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -226,21 +241,21 @@ const About = () => {
       {/* Transparency Archive + RTI */}
       <section className="section-padding">
         <div className="container max-w-4xl">
-          <h2 className="text-2xl font-bold mb-6">Transparency Archive</h2>
+          <h2 className="text-2xl font-bold mb-6">{t("about_transparency_title")}</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="md:col-span-2 grid grid-cols-2 gap-4">
               {[
-                { title: "Annual Report 2025-26", icon: "📄" },
-                { title: "Policy Framework", icon: "📋" },
-                { title: "Budget Allocation", icon: "💰" },
-                { title: "Audit Reports", icon: "📊" },
+                { key: "about_doc1", val: "Annual Report 2025-26", icon: "📄" },
+                { key: "about_doc2", val: "Policy Framework", icon: "📋" },
+                { key: "about_doc3", val: "Budget Allocation", icon: "💰" },
+                { key: "about_doc4", val: "Audit Reports", icon: "📊" },
               ].map((doc) => (
-                <Card key={doc.title} className="cursor-pointer hover:shadow-md transition-shadow shadow-none">
+                <Card key={doc.key} className="cursor-pointer hover:shadow-md transition-shadow shadow-none">
                   <CardContent className="p-4 flex items-center gap-3">
                     <span className="text-2xl">{doc.icon}</span>
                     <div>
-                      <p className="font-medium text-sm">{doc.title}</p>
-                      <p className="text-xs text-muted-foreground">PDF Download</p>
+                      <p className="font-medium text-sm">{t(doc.key, { defaultValue: doc.val })}</p>
+                      <p className="text-xs text-muted-foreground">{t("about_pdf_download")}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -248,15 +263,15 @@ const About = () => {
             </div>
             <Card className="bg-muted/50 shadow-none">
               <CardContent className="p-5">
-                <Badge variant="outline" className="mb-3 text-xs">RTI Section</Badge>
+                <Badge variant="outline" className="mb-3 text-xs">{t("about_rti_badge")}</Badge>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                  Public information under Right to Information Act 2005. Address correspondence to:
+                  {t("about_rti_desc")}
                 </p>
-                <p className="text-xs font-semibold mb-1">Sri. S. Prabhakar</p>
-                <p className="text-xs text-muted-foreground">Public Information Officer</p>
+                <p className="text-xs font-semibold mb-1">{t("about_rti_name")}</p>
+                <p className="text-xs text-muted-foreground">{t("about_rti_title")}</p>
                 <p className="text-xs text-primary mt-2">rti@tgcmfc.gov.in</p>
                 <Button variant="outline" size="sm" className="mt-4 w-full text-xs gap-1">
-                  <ExternalLink className="h-3 w-3" /> Access RTI Documents
+                  <ExternalLink className="h-3 w-3" /> {t("about_rti_btn")}
                 </Button>
               </CardContent>
             </Card>
@@ -269,11 +284,11 @@ const About = () => {
         <div className="container">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-bold">Moments of Impact</h2>
-              <p className="text-sm text-muted-foreground">Visual journey of our welfare initiatives across Telangana</p>
+              <h2 className="text-2xl font-bold">{t("about_gallery_title")}</h2>
+              <p className="text-sm text-muted-foreground">{t("about_gallery_subtitle")}</p>
             </div>
             <Button variant="ghost" size="sm" className="text-primary gap-1">
-              View Gallery <ChevronRight className="h-4 w-4" />
+              {t("about_gallery_btn")} <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -291,19 +306,19 @@ const About = () => {
         <div className="container max-w-3xl">
           <Card className="bg-muted/30 shadow-none">
             <CardContent className="p-8 text-center">
-              <h2 className="text-xl font-bold mb-2">Looking for something else?</h2>
+              <h2 className="text-xl font-bold mb-2">{t("about_cta_title")}</h2>
               <p className="text-sm text-muted-foreground mb-6">
-                Quickly navigate to our core resources or get in touch with our district support team for assistance.
+                {t("about_cta_desc")}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link to="/schemes">
-                  <Button variant="outline" className="gap-1 rounded-full">Browse Schemes</Button>
+                  <Button variant="outline" className="gap-1 rounded-full">{t("about_cta_schemes")}</Button>
                 </Link>
                 <Link to="/contact">
-                  <Button variant="outline" className="gap-1 rounded-full">Contact Us</Button>
+                  <Button variant="outline" className="gap-1 rounded-full">{t("about_cta_contact")}</Button>
                 </Link>
                 <Link to="/grievance">
-                  <Button className="gap-1 rounded-full">Resources & FAQ</Button>
+                  <Button className="gap-1 rounded-full">{t("about_cta_faq")}</Button>
                 </Link>
               </div>
             </CardContent>

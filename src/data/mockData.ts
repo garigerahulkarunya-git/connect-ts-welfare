@@ -235,9 +235,24 @@ export const schemes: Scheme[] = [
 ];
 
 export const officials: Official[] = [
-  { name: "Shri. K. Chandrashekar", designation: "Secretary", photo: "", quote: "Our mission is to ensure every minority citizen has the tools to succeed and contribute to the state's progress." },
-  { name: "Smt. Sarah Joseph", designation: "Managing Director", photo: "", quote: "Transparency and digital-first governance are the pillars of TGCMFC's commitment to the community." },
-  { name: "Shri. Peter Anthony", designation: "Chairman", photo: "", quote: "We are building a future where financial barriers do not limit the potential of our talented youth." },
+  { 
+    name: "Shri. K. Chandrashekar", 
+    designation: "Secretary", 
+    photo: "/assets/images/secretary.png", 
+    quote: "Our mission is to ensure every minority citizen has the tools to succeed and contribute to the state's progress." 
+  },
+  { 
+    name: "Smt. Sarah Joseph", 
+    designation: "Managing Director", 
+    photo: "/assets/images/md.png", 
+    quote: "Transparency and digital-first governance are the pillars of TGCMFC's commitment to the community." 
+  },
+  { 
+    name: "Shri. Peter Anthony", 
+    designation: "Chairman", 
+    photo: "/assets/images/chairman.png", 
+    quote: "We are building a future where financial barriers do not limit the potential of our talented youth." 
+  },
 ];
 
 export const districts: District[] = [
@@ -254,12 +269,12 @@ export const districts: District[] = [
 ];
 
 export const newsItems: NewsItem[] = [
-  { id: "1", title: "TGCMFC Launches New Education Scholarship Portal", date: "2026-03-25", category: "Announcement", excerpt: "A new digital portal for easy scholarship applications has been launched for the academic year 2026-27.", image: "", type: "news" },
-  { id: "2", title: "Skill Development Camp at Warangal", date: "2026-04-10", category: "Event", excerpt: "Three-day skill development camp organized in collaboration with NSDC at Warangal district.", image: "", type: "event" },
-  { id: "3", title: "1000+ Students Benefit from Scholarship Scheme", date: "2026-03-15", category: "Achievement", excerpt: "Over 1000 students received educational scholarships in the last quarter, a record achievement.", image: "", type: "success" },
-  { id: "4", title: "Housing Subsidy Distribution Ceremony", date: "2026-03-20", category: "Event", excerpt: "Managing Director distributed housing subsidy checks to 200 beneficiaries at a ceremony in Hyderabad.", image: "", type: "event" },
-  { id: "5", title: "From Tailor to Entrepreneur: A Success Story", date: "2026-02-28", category: "Success Story", excerpt: "Mary Thomas from Karimnagar used the micro-enterprise loan to build a successful garment business.", image: "", type: "success" },
-  { id: "6", title: "Annual Report 2025-26 Released", date: "2026-03-01", category: "Report", excerpt: "The corporation's annual report highlighting key achievements and financial disbursements has been published.", image: "", type: "news" },
+  { id: "1", title: "TGCMFC Launches New Education Scholarship Portal", date: "2026-03-25", category: "Announcement", excerpt: "A new digital portal for easy scholarship applications has been launched for the academic year 2026-27.", image: "/assets/images/news_portal.png", type: "news" },
+  { id: "2", title: "Skill Development Camp at Warangal", date: "2026-04-10", category: "Event", excerpt: "Three-day skill development camp organized in collaboration with NSDC at Warangal district.", image: "/assets/images/news_camp.png", type: "event" },
+  { id: "3", title: "1000+ Students Benefit from Scholarship Scheme", date: "2026-03-15", category: "Achievement", excerpt: "Over 1000 students received educational scholarships in the last quarter, a record achievement.", image: "/assets/images/news_achievement.png", type: "success" },
+  { id: "4", title: "Housing Subsidy Distribution Ceremony", date: "2026-03-20", category: "Event", excerpt: "Managing Director distributed housing subsidy checks to 200 beneficiaries at a ceremony in Hyderabad.", image: "/assets/images/news_event.png", type: "event" },
+  { id: "5", title: "From Tailor to Entrepreneur: A Success Story", date: "2026-02-28", category: "Success Story", excerpt: "Mary Thomas from Karimnagar used the micro-enterprise loan to build a successful garment business.", image: "/assets/images/news_story.png", type: "success" },
+  { id: "6", title: "Annual Report 2025-26 Released", date: "2026-03-01", category: "Report", excerpt: "The corporation's annual report highlighting key achievements and financial disbursements has been published.", image: "/assets/images/news_report.png", type: "news" },
 ];
 
 export const sampleGrievances: GrievanceTicket[] = [
