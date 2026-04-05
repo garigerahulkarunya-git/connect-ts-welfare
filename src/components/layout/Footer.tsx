@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Twitter, Youtube } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 const Footer = () => {
-  const { t } = useTranslation();
   return (
     <footer>
       {/* Main Footer */}
@@ -16,17 +14,17 @@ const Footer = () => {
                 T
               </div>
               <p className="text-sm leading-relaxed">
-                {t("footer_about_text")}
+                The Telangana Christian (Minorities) Finance Corporation is dedicated to the progress and prosperity of Christian Minorities in the state through targeted financial and social interventions.
               </p>
             </div>
 
             {/* Location */}
             <div>
-              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">{t("footer_location_title")}</h4>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Location</h4>
               <ul className="space-y-4 text-sm">
                 <li className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
-                  <span>{t("footer_address")}</span>
+                  <span>6th Floor, Haj House, Opp: Public Garden, Nampally, Hyderabad, Telangana - 500001</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
@@ -41,18 +39,18 @@ const Footer = () => {
 
             {/* Other Portals */}
             <div>
-              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">{t("footer_portals_title")}</h4>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Other Portals</h4>
               <ul className="space-y-3 text-sm">
-                <li><a href="#" className="hover:text-background transition-colors">{t("footer_portal_state")}</a></li>
-                <li><a href="#" className="hover:text-background transition-colors">{t("footer_portal_mwd")}</a></li>
-                <li><a href="#" className="hover:text-background transition-colors">{t("footer_portal_cgg")}</a></li>
-                <li><a href="#" className="hover:text-background transition-colors">{t("footer_portal_epass")}</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">Telangana State Portal</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">Minority Welfare Department</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">Center for Good Governance</a></li>
+                <li><a href="#" className="hover:text-background transition-colors">ePass Telangana</a></li>
               </ul>
             </div>
 
             {/* Follow Us */}
             <div>
-              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">{t("footer_follow_title")}</h4>
+              <h4 className="font-bold text-background uppercase tracking-wider text-sm mb-5">Follow Us</h4>
               <div className="flex items-center gap-3">
                 <a href="#" className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="Facebook">
                   <Facebook className="h-5 w-5 text-background" />
@@ -72,11 +70,11 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="bg-foreground text-background/50 py-4">
         <div className="container flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] uppercase tracking-wider font-medium">
-          <p>© {new Date().getFullYear()} {t("footer_copyright")}</p>
+          <p>© {new Date().getFullYear()} Telangana Christian (Minorities) Finance Corporation. All Rights Reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-background transition-colors">{t("footer_privacy")}</a>
-            <a href="#" className="hover:text-background transition-colors">{t("footer_terms")}</a>
-            <a href="#" className="hover:text-background transition-colors">{t("footer_sitemap")}</a>
+            <a href="#" className="hover:text-background transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-background transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-background transition-colors">Sitemap</a>
           </div>
         </div>
       </div>

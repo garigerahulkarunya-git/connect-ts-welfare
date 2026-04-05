@@ -1,5 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap');
 
+/* ── Hide Google Translate toolbar / watermark ── */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+.goog-te-gadget,
+.goog-te-gadget-simple,
+#google_translate_element {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+  position: static !important;
+}
+body.translated-ltr,
+body.translated-rtl {
+  margin-top: 0 !important;
+  top: 0 !important;
+}
+/* Remove the "Select Language" box Google sometimes injects */
+.skiptranslate { display: none !important; }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -77,6 +99,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground font-sans;
   }
@@ -86,16 +109,29 @@
   .gov-gradient {
     background: linear-gradient(135deg, hsl(0 100% 27%), hsl(0 100% 20%));
   }
+
   .gov-gradient-warm {
     background: linear-gradient(135deg, hsl(0 100% 27%), hsl(24 100% 41%));
   }
+
   .gov-gradient-gold {
     background: linear-gradient(135deg, hsl(37 90% 51%), hsl(24 100% 41%));
   }
+
   .stat-counter {
     @apply text-4xl font-bold tabular-nums;
   }
+
   .section-padding {
     @apply py-12 md:py-16 lg:py-20;
   }
+}
+
+/* Scrollbar Hide Utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c//**)",
+      "Bash(python3 /tmp/add_translations.py)",
+      "Bash(where python:*)",
+      "Bash(where node:*)",
+      "Bash(python:*)",
+      "Bash(grep -l \"stats_breadcrumb\" \"C:\\\\Users\\\\ABHILASH\\\\OneDrive\\\\Documents\\\\gravity\\\\connect-ts-welfare\\\\public\\\\locales\"/*/translation.json)",
+      "Bash(sed 's/[^a-z_]*//g')",
+      "Bash(wc -l \"/c/Users/ABHILASH/OneDrive/Documents/gravity/connect-ts-welfare/public/locales\"/*\"/translation.json\")",
+      "Bash(rm:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm uninstall:*)"
+    ]
+  }
+}

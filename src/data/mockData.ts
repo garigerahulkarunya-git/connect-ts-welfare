@@ -236,12 +236,6 @@ export const schemes: Scheme[] = [
 
 export const officials: Official[] = [
   { 
-    name: "Shri. K. Chandrashekar", 
-    designation: "Secretary", 
-    photo: "/assets/images/secretary.png", 
-    quote: "Our mission is to ensure every minority citizen has the tools to succeed and contribute to the state's progress." 
-  },
-  { 
     name: "Smt. Sarah Joseph", 
     designation: "Managing Director", 
     photo: "/assets/images/md.png", 
@@ -275,6 +269,12 @@ export const newsItems: NewsItem[] = [
   { id: "4", title: "Housing Subsidy Distribution Ceremony", date: "2026-03-20", category: "Event", excerpt: "Managing Director distributed housing subsidy checks to 200 beneficiaries at a ceremony in Hyderabad.", image: "/assets/images/news_event.png", type: "event" },
   { id: "5", title: "From Tailor to Entrepreneur: A Success Story", date: "2026-02-28", category: "Success Story", excerpt: "Mary Thomas from Karimnagar used the micro-enterprise loan to build a successful garment business.", image: "/assets/images/news_story.png", type: "success" },
   { id: "6", title: "Annual Report 2025-26 Released", date: "2026-03-01", category: "Report", excerpt: "The corporation's annual report highlighting key achievements and financial disbursements has been published.", image: "/assets/images/news_report.png", type: "news" },
+  { id: "7", title: "Special Coaching for Civil Services Aspirants", date: "2026-04-05", category: "Education", excerpt: "Free coaching classes announced for minority students appearing for the next Civil Services examination.", image: "/assets/images/news_education.png", type: "news" },
+  { id: "8", title: "Women Entrepreneurship Workshop in Nizamabad", date: "2026-03-28", category: "Workshop", excerpt: "A successful workshop on digital marketing and business management was held for women entrepreneurs.", image: "/assets/images/news_workshop.png", type: "event" },
+  { id: "9", title: "Healthcare Awareness Drive in Rural Areas", date: "2026-03-10", category: "Health", excerpt: "Mobile health clinics reached over 50 villages to provide basic checkups and awareness sessions.", image: "/assets/images/news_health.png", type: "event" },
+  { id: "10", title: "New Grant for Minority Cultural Centers", date: "2026-03-05", category: "Culture", excerpt: "Government grants approved for the renovation and development of local minority community centers.", image: "/assets/images/news_culture.png", type: "news" },
+  { id: "11", title: "Vocational Excellence Awards 2026", date: "2026-04-12", category: "Award", excerpt: "Applications are now open for the Annual Vocational Excellence Awards for skilled artisans.", image: "/assets/images/news_award.png", type: "news" },
+  { id: "12", title: "Micro-Finance Scheme Reaches Milestone", date: "2026-02-15", category: "Achievement", excerpt: "The micro-finance scheme has successfully disbursed over 50 crores to small business owners.", image: "/assets/images/news_milestone.png", type: "success" },
 ];
 
 export const sampleGrievances: GrievanceTicket[] = [

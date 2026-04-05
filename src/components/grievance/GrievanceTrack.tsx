@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Search, CheckCircle2, Clock, AlertCircle, FileText, Copy, Phone } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +9,6 @@ import { sampleGrievances } from "@/data/mockData";
 import type { GrievanceTicket } from "@/data/mockData";
 
 const GrievanceTrack = () => {
-  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [trackedTicket, setTrackedTicket] = useState<GrievanceTicket | null>(null);
 
@@ -29,14 +27,20 @@ const GrievanceTrack = () => {
 
   const statusSteps = ["Submitted", "Under Review", "Resolved"] as const;
 
+  const stepLabelMap: Record<string, string> = {
+    "Submitted": "Submitted",
+    "Under Review": "Under Review",
+    "Resolved": "Resolved"
+  };
+
   return (
     <div>
       <div className="mb-6">
         <h1 className="text-3xl md:text-4xl font-black text-foreground italic leading-tight">
-          {t("grievance_submit_title")}
+          Grievance Redressal Portal
         </h1>
         <p className="text-sm font-semibold uppercase tracking-widest text-primary mt-1">
-          {t("grievance_track_title")}
+          Track & Monitor Real-Time Progress
         </p>
       </div>
 
@@ -46,20 +50,20 @@ const GrievanceTrack = () => {
           {/* Search Card */}
           <Card>
             <CardContent className="p-6">
-              <h2 className="font-bold text-lg mb-1">{t("grievance_track_locate")}</h2>
+              <h2 className="font-bold text-lg mb-1">Locate Your Request</h2>
               <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("grievance_track_id_label")}
+                Ticket ID or Mobile Number
               </Label>
               <div className="flex gap-2 mt-2">
                 <Input
-                  placeholder={t("grievance_track_id_placeholder")}
+                  placeholder="e.g. TG-2026-9912"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleTrack()}
                   className="flex-1"
                 />
                 <Button onClick={handleTrack} className="gap-2">
-                  <Search className="h-4 w-4" /> {t("grievance_track_btn")}
+                  <Search className="h-4 w-4" /> Track
                 </Button>
               </div>
               <div className="flex gap-2 mt-3">
@@ -69,7 +73,7 @@ const GrievanceTrack = () => {
                     onClick={() => selectRecent(g.id)}
                     className="text-xs px-3 py-1.5 rounded-full border font-medium hover:bg-muted transition-colors"
                   >
-                    {t("grievance_track_recent")} {g.id}
+                    Recent: {g.id}
                   </button>
                 ))}
               </div>
@@ -82,13 +86,13 @@ const GrievanceTrack = () => {
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <span className="w-8 h-px bg-primary inline-block" />
-                  {t("grievance_track_analysis")}
+                  Current Status Analysis
                 </h3>
                 <button
                   onClick={() => navigator.clipboard.writeText(trackedTicket.id)}
                   className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground"
                 >
-                  <Copy className="h-3 w-3" /> {t("grievance_track_copy")} {trackedTicket.id}
+                  <Copy className="h-3 w-3" /> Copy Ticket ID: {trackedTicket.id}
                 </button>
               </div>
 
@@ -102,12 +106,6 @@ const GrievanceTrack = () => {
                       const isCurrent = i === currentIdx;
                       const isFuture = i > currentIdx;
 
-                      const stepKeyMap: Record<string, string> = {
-                        "Submitted": "grievance_track_submitted",
-                        "Under Review": "grievance_track_review",
-                        "Resolved": "grievance_track_resolved"
-                      };
-
                       return (
                         <div key={step} className="flex flex-col items-center text-center flex-1">
                           <div className={`h-10 w-10 rounded-full flex items-center justify-center mb-2 ${
@@ -119,9 +117,9 @@ const GrievanceTrack = () => {
                           </div>
                           <span className={`text-xs font-bold uppercase tracking-wider ${
                             isCurrent ? "text-primary" : isFuture ? "text-muted-foreground/40" : "text-foreground"
-                          }`}>{t(stepKeyMap[step])}</span>
+                          }`}>{stepLabelMap[step]}</span>
                           {isCurrent && (
-                            <span className="text-[10px] text-primary font-semibold mt-0.5">{t("grievance_track_current_phase")}</span>
+                            <span className="text-[10px] text-primary font-semibold mt-0.5">Current Phase</span>
                           )}
                           {isComplete && (
                             <span className="text-[10px] text-muted-foreground mt-0.5">{trackedTicket.date}</span>
@@ -140,12 +138,12 @@ const GrievanceTrack = () => {
                       <div className="flex items-start gap-3">
                         <span className="h-2.5 w-2.5 rounded-full bg-primary mt-1.5 shrink-0" />
                         <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-primary">{t("grievance_track_timeline")}</p>
+                          <p className="text-xs font-bold uppercase tracking-wider text-primary">Timeline Update</p>
                           <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                             "{trackedTicket.timelineUpdate}"
                           </p>
                           <p className="text-[10px] text-muted-foreground mt-2">
-                            {trackedTicket.timelineTime} • {t("grievance_track_automated")}
+                            {trackedTicket.timelineTime} • Automated System Notification
                           </p>
                         </div>
                       </div>
@@ -162,12 +160,12 @@ const GrievanceTrack = () => {
           {/* SLA Card */}
           <Card className="bg-primary text-primary-foreground">
             <CardContent className="p-5">
-              <h3 className="font-bold text-sm">{t("grievance_track_sla_title")}</h3>
+              <h3 className="font-bold text-sm">Institutional SLAs</h3>
               <p className="text-xs opacity-80 mt-2 leading-relaxed">
-                {t("grievance_track_sla_desc")}
+                Our commitment to transparency ensures a maximum response time of 72 working hours for all institutional grievances.
               </p>
               <p className="text-4xl font-black mt-4">98.4%</p>
-              <p className="text-[10px] uppercase tracking-widest opacity-70 mt-1">{t("grievance_track_res_rate")}</p>
+              <p className="text-[10px] uppercase tracking-widest opacity-70 mt-1">Resolution Rate 2025</p>
             </CardContent>
           </Card>
 
@@ -181,39 +179,39 @@ const GrievanceTrack = () => {
                       <FileText className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <p className="font-bold text-sm">{t("grievance_track_assignment")}</p>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("grievance_track_custodian")}</p>
+                      <p className="font-bold text-sm">Assignment Detail</p>
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Institutional Custodian</p>
                     </div>
                   </div>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between border-b pb-2">
-                      <span className="text-muted-foreground">{t("grievance_track_officer")}</span>
+                      <span className="text-muted-foreground">Officer Assigned</span>
                       <span className="font-semibold text-primary">{trackedTicket.officerAssigned}</span>
                     </div>
                     <div className="flex justify-between border-b pb-2">
-                      <span className="text-muted-foreground">{t("grievance_track_dept")}</span>
+                      <span className="text-muted-foreground">Department</span>
                       <span className="font-semibold">{trackedTicket.department}</span>
                     </div>
                     <div className="flex justify-between border-b pb-2">
-                      <span className="text-muted-foreground">{t("grievance_track_date")}</span>
+                      <span className="text-muted-foreground">Filing Date</span>
                       <span className="font-semibold">{trackedTicket.date}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">{t("grievance_track_priority")}</span>
+                      <span className="text-muted-foreground">Priority Status</span>
                       <Badge variant={trackedTicket.priority === "HIGH PRIORITY" ? "destructive" : "secondary"} className="text-[10px]">
                         {trackedTicket.priority}
                       </Badge>
                     </div>
                   </div>
                   <Button variant="outline" className="w-full mt-4 text-xs font-bold uppercase tracking-wider">
-                    <Phone className="h-3 w-3 mr-2" /> {t("grievance_track_callback")}
+                    <Phone className="h-3 w-3 mr-2" /> Request Callback
                   </Button>
                 </CardContent>
               </Card>
 
               <Card className="bg-muted/50">
                 <CardContent className="p-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("grievance_track_docs")}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Supporting Documents</p>
                   <div className="flex items-center gap-2 mt-2">
                     <FileText className="h-4 w-4 text-muted-foreground" />
                     <span className="text-xs">Grievance_Application_Final.pdf</span>

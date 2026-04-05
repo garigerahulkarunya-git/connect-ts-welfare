@@ -11,6 +11,8 @@ import Grievance from "./pages/Grievance";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Media from "./pages/Media";
+import Gallery from "./pages/Gallery";
+import Statistics from "./pages/Statistics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/grievance" element={<Grievance />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/statistics" element={<Statistics />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/media" element={<Media />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
