@@ -12,24 +12,24 @@ import {
 const logo = "/assets/images/logo.png";
 
 const googleLanguages = [
-  { code: "en",  name: "English",    nativeName: "English"       },
-  { code: "te",  name: "Telugu",     nativeName: "తెలుగు"        },
-  { code: "hi",  name: "Hindi",      nativeName: "हिंदी"          },
-  { code: "ta",  name: "Tamil",      nativeName: "தமிழ்"         },
-  { code: "kn",  name: "Kannada",    nativeName: "ಕನ್ನಡ"         },
-  { code: "ml",  name: "Malayalam",  nativeName: "മലയാളം"        },
-  { code: "mr",  name: "Marathi",    nativeName: "मराठी"         },
-  { code: "bn",  name: "Bengali",    nativeName: "বাংলা"         },
-  { code: "gu",  name: "Gujarati",   nativeName: "ગુજરાતી"       },
-  { code: "pa",  name: "Punjabi",    nativeName: "ਪੰਜਾਬੀ"        },
-  { code: "or",  name: "Odia",       nativeName: "ଓଡ଼ିଆ"         },
-  { code: "ur",  name: "Urdu",       nativeName: "اردو"          },
-  { code: "as",  name: "Assamese",   nativeName: "অসমীয়া"        },
-  { code: "sa",  name: "Sanskrit",   nativeName: "संस्कृत"        },
-  { code: "ne",  name: "Nepali",     nativeName: "नेपाली"        },
-  { code: "mai", name: "Maithili",   nativeName: "मैथिली"        },
-  { code: "mni", name: "Manipuri",   nativeName: "মৈতৈলোন্"      },
-  { code: "doi", name: "Dogri",      nativeName: "डोगरी"         },
+  { code: "en", name: "English", nativeName: "English" },
+  { code: "te", name: "Telugu", nativeName: "తెలుగు" },
+  { code: "hi", name: "Hindi", nativeName: "हिंदी" },
+  { code: "ta", name: "Tamil", nativeName: "தமிழ்" },
+  { code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ" },
+  { code: "ml", name: "Malayalam", nativeName: "മലയാളം" },
+  { code: "mr", name: "Marathi", nativeName: "मराठी" },
+  { code: "bn", name: "Bengali", nativeName: "বাংলা" },
+  { code: "gu", name: "Gujarati", nativeName: "ગુજરાતી" },
+  { code: "pa", name: "Punjabi", nativeName: "ਪੰਜਾਬੀ" },
+  { code: "or", name: "Odia", nativeName: "ଓଡ଼ିଆ" },
+  { code: "ur", name: "Urdu", nativeName: "اردو" },
+  { code: "as", name: "Assamese", nativeName: "অসমীয়া" },
+  { code: "sa", name: "Sanskrit", nativeName: "संस्कृत" },
+  { code: "ne", name: "Nepali", nativeName: "नेपाली" },
+  { code: "mai", name: "Maithili", nativeName: "मैथिली" },
+  { code: "mni", name: "Manipuri", nativeName: "মৈতৈলোন্" },
+  { code: "doi", name: "Dogri", nativeName: "डोगरी" },
 ];
 
 const Header = () => {
@@ -39,13 +39,13 @@ const Header = () => {
   const location = useLocation();
 
   const navLinks = [
-    { to: "/",           label: "HOME"        },
-    { to: "/about",      label: "ABOUT US"    },
-    { to: "/schemes",    label: "SCHEMES"     },
-    { to: "/statistics", label: "STATISTICS"  },
-    { to: "/gallery",    label: "GALLERY"     },
-    { to: "/grievance",  label: "GRIEVANCE"   },
-    { to: "/contact",    label: "CONTACT US"  },
+    { to: "/", label: "HOME" },
+    { to: "/about", label: "ABOUT US" },
+    { to: "/schemes", label: "SCHEMES" },
+    { to: "/statistics", label: "STATISTICS" },
+    { to: "/gallery", label: "GALLERY" },
+    { to: "/grievance", label: "GRIEVANCE" },
+    { to: "/contact", label: "CONTACT US" },
   ];
 
   const changeGoogleLanguage = (lang: typeof googleLanguages[0]) => {
@@ -149,8 +149,8 @@ const Header = () => {
 
             {/* CM + Minister photos */}
             {[
-              { name: "Sri A. Revanth Reddy", title: "HON'BLE CHIEF MINISTER",  photo: "/assets/images/cm.png"       },
-              { name: "Sri Mohammed Ali",      title: "HON'BLE MINISTER FOR MW", photo: "/assets/images/minister.png" },
+              { name: "Sri A. Revanth Reddy", title: "HON'BLE CHIEF MINISTER", photo: "/assets/images/cm.png" },
+              { name: "Sri Mohammed Ali", title: "HON'BLE MINISTER FOR MW", photo: "/assets/images/minister.png" },
             ].map((person) => (
               <div key={person.name} className="flex flex-col items-center gap-0.5 sm:gap-1 text-center shrink-0">
                 <div className="h-10 w-10 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 rounded bg-muted border-b-2 border-primary overflow-hidden shadow-sm">
@@ -187,7 +187,7 @@ const Header = () => {
 
       {/* ── Navigation Bar ── */}
       <nav className="bg-foreground/95">
-        <div className="flex items-center">
+        <div className="flex items-center pr-[72px]">
 
           {/* DESKTOP: all links visible */}
           <div className="hidden lg:flex flex-1 items-center">
@@ -195,11 +195,10 @@ const Header = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`block px-5 py-3 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${
-                  location.pathname === link.to
-                    ? "bg-primary text-primary-foreground"
-                    : "text-background/90 hover:bg-primary/80 hover:text-primary-foreground"
-                }`}
+                className={`block px-5 py-3 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${location.pathname === link.to
+                  ? "bg-primary text-primary-foreground"
+                  : "text-background/90 hover:bg-primary/80 hover:text-primary-foreground"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -249,11 +248,10 @@ const Header = () => {
                 key={link.to}
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
-                className={`px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border-b border-border/40 last:border-0 flex items-center justify-between ${
-                  location.pathname === link.to
-                    ? "text-primary font-bold bg-primary/5"
-                    : "text-foreground hover:text-primary hover:bg-muted"
-                }`}
+                className={`px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border-b border-border/40 last:border-0 flex items-center justify-between ${location.pathname === link.to
+                  ? "text-primary font-bold bg-primary/5"
+                  : "text-foreground hover:text-primary hover:bg-muted"
+                  }`}
               >
                 {link.label}
                 {location.pathname === link.to && (

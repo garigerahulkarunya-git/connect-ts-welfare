@@ -71,7 +71,7 @@ const Media = () => {
           {/* Main content */}
           <div className="flex-1 min-w-0">
             <p className="text-xs text-muted-foreground mb-2">Home &gt; Media</p>
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-2">
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-2 text-primary">
               {"News, Events & Media".split(",").map((line, i) => (
                 <span key={i}>{line}{i === 0 && <br />}</span>
               ))}
@@ -85,10 +85,10 @@ const Media = () => {
               <CardContent className="p-0">
                 <div className="p-6 md:p-8">
                   <Badge className="bg-primary text-primary-foreground mb-3 text-xs">Featured Announcement</Badge>
-                  <h2 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">
+                  <h2 className="text-xl md:text-2xl font-extrabold leading-tight mb-3">
                     New Scholarship Scheme 2025 Launched for Higher Education
                   </h2>
-                  <p className="text-sm opacity-80 mb-4 max-w-lg">
+                  <p className="text-[13px] opacity-80 mb-4 max-w-lg">
                     The Telangana Christian Minorities Finance Corporation announces a historic expansion of the post-matric scholarship program, reaching...
                   </p>
                   <Button variant="outline" className="rounded-full bg-background text-foreground hover:bg-muted gap-1">
@@ -144,8 +144,8 @@ const Media = () => {
                         • {new Date(item.date).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" })}
                       </span>
                     </div>
-                    <h3 className="font-bold text-sm leading-snug mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{item.excerpt}</p>
+                    <h3 className="font-bold text-[12px] leading-snug mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
+                    <p className="text-[10px] text-muted-foreground line-clamp-2">{item.excerpt}</p>
                     <button className="text-xs text-primary font-semibold mt-3 inline-flex items-center gap-1 hover:underline">
                       Read More <ArrowRight className="h-3 w-3" />
                     </button>

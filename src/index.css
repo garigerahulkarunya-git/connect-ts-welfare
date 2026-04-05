@@ -125,13 +125,20 @@ body.translated-rtl {
   .section-padding {
     @apply py-12 md:py-16 lg:py-20;
   }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
-/* Scrollbar Hide Utility */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Base styles for scrollbar removal if the utility doesn't catch it */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
 }
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
