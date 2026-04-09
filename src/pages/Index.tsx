@@ -40,36 +40,49 @@ const Index = () => {
   const displayStories = stories.length > 0 ? [...stories, ...stories, ...stories] : [];
   const displayHeroSlides = heroSlides.length > 0 ? [heroSlides[heroSlides.length - 1], ...heroSlides, heroSlides[0]] : [];
 
-  // Auto-scroll loop — ONLY on desktop (lg+)
+  // Auto-scroll loop — ALL devices (Stops at end)
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
-    // Check if we're on desktop (lg = 1024px+)
-    const isDesktop = () => window.innerWidth >= 1024;
+
+    let lastInteractionTime = 0;
     let animationFrameId: number;
     const scrollSpeed = 0.5;
+
     const scroll = () => {
-      if (!isHovering && scrollContainer && isDesktop()) {
+      const now = Date.now();
+      // Only auto-scroll if not hovering AND it's been 3000ms since last interaction
+      if (!isHovering && scrollContainer && (now - lastInteractionTime > 3000)) {
         const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-        if ((scrollContainer as any).isReversing) {
-          if (scrollContainer.scrollTop <= 0) {
-            (scrollContainer as any).isReversing = false;
-          } else {
-            scrollContainer.scrollTop -= 50;
-          }
+
+        if (scrollContainer.scrollTop >= maxScroll - 1) {
+          scrollContainer.scrollTo({ top: 0, behavior: "auto" });
         } else {
-          if (scrollContainer.scrollTop >= maxScroll - 1) {
-            (scrollContainer as any).isReversing = true;
-          } else {
-            scrollContainer.scrollTop += scrollSpeed;
-          }
+          scrollContainer.scrollTop += scrollSpeed;
         }
       }
       animationFrameId = requestAnimationFrame(scroll);
     };
+
+    const handleInteraction = () => {
+      lastInteractionTime = Date.now();
+    };
+
+    scrollContainer.addEventListener('touchstart', handleInteraction, { passive: true });
+    scrollContainer.addEventListener('mousedown', handleInteraction);
+    scrollContainer.addEventListener('wheel', handleInteraction, { passive: true });
+
     animationFrameId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      scrollContainer.removeEventListener('touchstart', handleInteraction);
+      scrollContainer.removeEventListener('mousedown', handleInteraction);
+      scrollContainer.removeEventListener('wheel', handleInteraction);
+    };
+
   }, [isHovering]);
+
+
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -79,14 +92,18 @@ const Index = () => {
     const onTouchMove = (e: TouchEvent) => {
       const currentY = e.touches[0].clientY;
       const deltaY = touchStartY - currentY;
+
       const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
       const atTop = el.scrollTop <= 0;
+
+      // When at edges, "lock" the news scroll and "pass" the movement to the page
       if ((atBottom && deltaY > 0) || (atTop && deltaY < 0)) {
-        e.preventDefault();
-        window.scrollBy({ top: deltaY, behavior: "auto" });
+        if (e.cancelable) e.preventDefault();
+        window.scrollBy(0, deltaY); // Direct pixel-to-pixel scroll for the whole page
         touchStartY = currentY;
       }
     };
+
     el.addEventListener("touchstart", onTouchStart, { passive: true });
     el.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
@@ -155,12 +172,13 @@ const Index = () => {
     <Layout>
       <section className="bg-background py-6">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr_240px] gap-5 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-[170px_1fr_240px] gap-5 items-stretch">
             <aside className="order-3 lg:order-1 lg:h-[440px] flex flex-col">
               <div className="flex flex-row lg:flex-col gap-2 flex-1 h-full">
                 {officials.map((official) => (
-                  <div key={official.name} className="flex flex-col items-center justify-center text-center gap-2 border border-border rounded-xl p-3 bg-card/50 hover:bg-card transition-all overflow-hidden flex-1 py-4">
-                    <div className="h-24 w-20 sm:h-28 sm:w-24 lg:h-36 lg:w-32 rounded-xl overflow-hidden border-2 border-primary/30 flex items-center justify-center bg-muted shrink-0 shadow-sm">
+                  <div key={official.name} className="flex flex-col items-center justify-center text-center gap-1.5 border border-border rounded-xl p-2 bg-card/50 hover:bg-card transition-all overflow-hidden flex-1 py-3">
+                    <div className="h-20 w-16 sm:h-24 sm:w-20 lg:h-32 lg:w-28 rounded-xl overflow-hidden border-2 border-primary/30 flex items-center justify-center bg-muted shrink-0 shadow-sm">
+
                       {official.photo ? (
                         <img
                           src={official.photo}
@@ -182,11 +200,12 @@ const Index = () => {
                       )}
                     </div>
                     <div className="mt-1">
-                      <h4 className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-muted-foreground uppercase tracking-tight leading-tight">{official.designation}</h4>
-                      <p className="text-[11px] sm:text-xs lg:text-sm font-extrabold text-foreground mt-0.5 leading-tight">
+                      <h4 className="text-[8px] sm:text-[9px] lg:text-[10px] font-bold text-muted-foreground uppercase tracking-tight leading-tight">{official.designation}</h4>
+                      <p className="text-[10px] sm:text-[11px] lg:text-xs font-extrabold text-foreground mt-0.5 leading-tight">
                         {official.name}
                       </p>
                     </div>
+
                   </div>
                 ))}
               </div>
@@ -203,13 +222,15 @@ const Index = () => {
                       <img
                         src={slide.image || heroIllustration}
                         alt={slide.title}
-                        loading="lazy"
+                        loading={i === 1 ? "eager" : "lazy"}
+                        fetchPriority={i === 1 ? "high" : "low"}
                         decoding="async"
                         className="absolute inset-0 w-full h-full object-cover opacity-60"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = heroIllustration;
                         }}
                       />
+
                       <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 md:p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
                         <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-white leading-tight">
                           {slide.title}
@@ -254,7 +275,10 @@ const Index = () => {
                   ref={scrollRef}
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
+                  onTouchStart={() => setIsHovering(true)}
+                  onTouchEnd={() => setIsHovering(false)}
                   style={{ overscrollBehaviorY: "auto" }}
+
                 >
                   <div className="divide-y divide-border">
                     {sortedNews.slice(0, 20).map((item, idx) => {
@@ -346,10 +370,7 @@ const Index = () => {
                       {scheme.highlight}
                     </div>
                   )}
-                  {/* Scheme number */}
-                  <div className="absolute bottom-3 left-3">
-                    <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Scheme 0{idx + 1}</span>
-                  </div>
+
                 </div>
 
                 {/* Content */}
@@ -360,19 +381,22 @@ const Index = () => {
                   <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-2 flex-1">
                     {scheme.desc}
                   </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="h-px flex-1 bg-border mr-4" />
+                  <div className="mt-8 flex justify-end">
                     <Link
                       to={scheme.link}
-                      className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold uppercase tracking-widest py-2.5 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md shrink-0"
+                      className="animate-shimmer inline-flex items-center gap-3 bg-primary text-primary-foreground text-sm font-extrabold uppercase tracking-widest py-3.5 px-10 rounded-xl shadow-lg hover:shadow-primary/20 shrink-0"
                     >
-                      Apply Now <ArrowRight className="h-3.5 w-3.5" />
+                      Apply Now <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
+
+
+
                 </div>
 
-                {/* Left accent bar */}
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* Full Accent Border on Hover */}
+                <div className="absolute inset-0 border-2 border-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-10" />
+
               </div>
             ))}
           </div>

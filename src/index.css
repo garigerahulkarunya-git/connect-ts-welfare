@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap');
+
 
 /* ── Hide Google Translate toolbar / watermark ── */
 .goog-te-banner-frame,
@@ -134,11 +134,36 @@ body.translated-rtl {
   }
 }
 
-/* Base styles for scrollbar removal if the utility doesn't catch it */
-.no-scrollbar::-webkit-scrollbar {
-  display: none !important;
+@keyframes shimmer {
+  0% { transform: translateX(-200%) skewX(-25deg); }
+  100% { transform: translateX(200%) skewX(-25deg); }
 }
-.no-scrollbar {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
 }
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite linear;
+}
+
+.animate-shimmer:hover {
+  box-shadow: 0 0 20px rgba(179, 0, 0, 0.4), 0 0 40px rgba(179, 0, 0, 0.2);
+  transform: translateY(-2px) scale(1.05);
+}
+
+
