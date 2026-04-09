@@ -52,7 +52,7 @@ const Header = () => {
     setCurrentLang(lang);
     if (lang.code === "en") {
       document.cookie = "googtrans=; path=/; expires=" + new Date(0).toUTCString();
-      document.cookie = "googtrans=; path=/; domain=." + location.hostname + "; expires=" + new Date(0).toUTCString();
+      document.cookie = "googtrans=; path=/; domain=." + window.location.hostname + "; expires=" + new Date(0).toUTCString();
       window.location.reload();
       return;
     }
@@ -62,7 +62,7 @@ const Header = () => {
       select.dispatchEvent(new Event("change"));
     } else {
       document.cookie = `googtrans=/en/${lang.code}; path=/`;
-      document.cookie = `googtrans=/en/${lang.code}; path=/; domain=.${location.hostname}`;
+      document.cookie = `googtrans=/en/${lang.code}; path=/; domain=.${window.location.hostname}`;
       window.location.reload();
     }
   };
@@ -78,9 +78,9 @@ const Header = () => {
 
       {/* ── Top Government Bar ── */}
       <div className="gov-gradient text-primary-foreground">
-        <div className="container flex items-center justify-between py-1 text-[9px] sm:text-[10px] md:text-xs font-medium">
+        <div className="w-full flex items-center justify-between py-1 px-2 sm:px-4 text-[9px] sm:text-[10px] md:text-xs font-medium">
           <div className="flex items-center gap-1 sm:gap-2">
-            <span className="flex items-center gap-1">🏛 GOVERNMENT OF TELANGANA</span>
+            <span className="flex items-center gap-1"><Landmark className="h-3 w-3 sm:h-4 sm:w-4" /> GOVERNMENT OF TELANGANA</span>
             <span className="hidden sm:inline">|</span>
             <span className="hidden sm:flex items-center gap-1">
               <Globe className="h-3 w-3" /> TG-CMFC OFFICIAL PORTAL

@@ -286,10 +286,10 @@ const Index = () => {
                       return (
                         <div
                           key={`${item.id}-${idx}`}
-                          className={`px-3 py-3 transition-colors hover:bg-muted/40 relative`}
+                          className={`px-3 py-3 transition-colors hover:bg-muted/40 relative group cursor-pointer`}
                         >
                           <div className="flex items-start justify-between gap-3 mb-1">
-                            <p className="text-[12px] font-bold text-foreground leading-tight flex-1">
+                            <p className="text-[12px] font-bold text-foreground leading-tight flex-1 group-hover:underline underline-offset-2">
                               {item.title}
                             </p>
                             {isTopFive && (

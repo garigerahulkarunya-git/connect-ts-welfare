@@ -5,7 +5,7 @@
 export const parseStoryInfo = (path: string) => {
   const fileName = path.split('/').pop() || "";
   // Remove extension and common suffixes
-  let cleanName = fileName
+  const cleanName = fileName
     .replace(/\.[^/.]+$/, "") // Remove extension
     .replace(/\s(one|two|three|four|five|- Copy)$/i, "") // Remove enumeration
     .replace(/ÔÇô/g, "-") // Clean special characters if any
