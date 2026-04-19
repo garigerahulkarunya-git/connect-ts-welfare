@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Globe, ChevronDown, ExternalLink, Landmark, Menu, X } from "lucide-react";
+import { Globe, ChevronDown, ChevronUp, ExternalLink, Landmark, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { schemes } from "@/data/mockData";
 
 const logo = "/assets/images/logo.png";
 
@@ -36,6 +38,7 @@ const Header = () => {
   const [fontSize, setFontSize] = useState(16);
   const [currentLang, setCurrentLang] = useState(googleLanguages[0]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [schemesOpen, setSchemesOpen] = useState(false);
   const location = useLocation();
 
   const navLinks = [
@@ -191,18 +194,55 @@ const Header = () => {
 
           {/* DESKTOP: all links visible */}
           <div className="hidden lg:flex flex-1 items-center">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`block px-5 py-3 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${location.pathname === link.to
-                  ? "bg-primary text-primary-foreground"
-                  : "text-background/90 hover:bg-primary/80 hover:text-primary-foreground"
-                  }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              if (link.label === "SCHEMES") {
+                return (
+                  <div key={link.to} className="relative group">
+                    <Link
+                      to={link.to}
+                      className={`relative flex items-center gap-1 px-5 py-4 text-sm font-bold uppercase tracking-wider whitespace-nowrap transition-all after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-yellow-400 after:transition-all after:duration-300 after:origin-left ${location.pathname === link.to
+                        ? "bg-primary text-primary-foreground after:w-full"
+                        : "text-background/90 hover:bg-primary/80 hover:text-primary-foreground after:w-0 hover:after:w-full"
+                        }`}
+                    >
+                      {link.label}
+                      <ChevronDown className="h-3 w-3 opacity-70 group-hover:rotate-180 transition-transform duration-200" />
+                    </Link>
+                    {/* Dropdown */}
+                    <div className="absolute top-full left-0 w-72 bg-card border border-border rounded-b-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                      <div className="py-1">
+                        {schemes.map((scheme) => (
+                          <Link
+                            key={scheme.id}
+                            to={`/schemes#${scheme.id}`}
+                            className="flex items-center px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                          >
+                            <span className="leading-tight">{scheme.title}</span>
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="border-t border-border px-4 py-2.5">
+                        <Link to="/schemes" className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1">
+                          View All Schemes →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`relative block px-5 py-4 text-sm font-bold uppercase tracking-wider whitespace-nowrap transition-all after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-yellow-400 after:transition-all after:duration-300 after:origin-left ${location.pathname === link.to
+                    ? "bg-primary text-primary-foreground after:w-full"
+                    : "text-background/90 hover:bg-primary/80 hover:text-primary-foreground after:w-0 hover:after:w-full"
+                    }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* MOBILE / TABLET: active page label */}
@@ -243,22 +283,61 @@ const Header = () => {
       {menuOpen && (
         <div className="lg:hidden absolute left-0 right-0 bg-card border-t border-border shadow-xl z-50">
           <div className="container py-2 flex flex-col">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMenuOpen(false)}
-                className={`px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border-b border-border/40 last:border-0 flex items-center justify-between ${location.pathname === link.to
-                  ? "text-primary font-bold bg-primary/5"
-                  : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
-              >
-                {link.label}
-                {location.pathname === link.to && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                )}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              if (link.label === "SCHEMES") {
+                return (
+                  <div key={link.to}>
+                    <button
+                      onClick={() => setSchemesOpen(!schemesOpen)}
+                      className={`w-full px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border-b border-border/40 flex items-center justify-between ${location.pathname === link.to
+                        ? "text-primary font-bold bg-primary/5"
+                        : "text-foreground hover:text-primary hover:bg-muted"
+                        }`}
+                    >
+                      {link.label}
+                      {schemesOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {schemesOpen && (
+                      <div className="bg-muted/30">
+                        <Link
+                          to="/schemes"
+                          onClick={() => { setMenuOpen(false); setSchemesOpen(false); }}
+                          className="block px-6 py-2.5 text-xs font-bold text-primary border-b border-border/20 hover:bg-primary/10"
+                        >
+                          → View All Schemes
+                        </Link>
+                        {schemes.map((scheme) => (
+                          <Link
+                            key={scheme.id}
+                            to={`/schemes#${scheme.id}`}
+                            onClick={() => { setMenuOpen(false); setSchemesOpen(false); }}
+                            className="flex items-center px-6 py-2.5 text-xs font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-border/10 last:border-0"
+                          >
+                            {scheme.title}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMenuOpen(false)}
+                  className={`px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border-b border-border/40 last:border-0 flex items-center justify-between ${location.pathname === link.to
+                    ? "text-primary font-bold bg-primary/5"
+                    : "text-foreground hover:text-primary hover:bg-muted"
+                    }`}
+                >
+                  {link.label}
+                  {location.pathname === link.to && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  )}
+                </Link>
+              );
+            })}
             <Link
               to="https://minoritywelfare.telangana.gov.in"
               target="_blank"

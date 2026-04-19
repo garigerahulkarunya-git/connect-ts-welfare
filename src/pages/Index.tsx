@@ -225,13 +225,13 @@ const Index = () => {
                         loading={i === 1 ? "eager" : "lazy"}
                         fetchPriority={i === 1 ? "high" : "low"}
                         decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover opacity-60"
+                        className="absolute inset-0 w-full h-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = heroIllustration;
                         }}
                       />
 
-                      <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 md:p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                      <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-4 sm:p-6 md:p-8 bg-gradient-to-t from-black/70 to-transparent pt-12">
                         <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-white leading-tight">
                           {slide.title}
                         </h2>
@@ -353,35 +353,34 @@ const Index = () => {
             {schemeCards.map((scheme, idx) => (
               <div
                 key={scheme.title}
-                className="group relative rounded-xl overflow-hidden border border-border bg-card hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                className="group relative rounded-xl overflow-hidden border border-border hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-64 md:h-72"
               >
-                {/* Top image strip */}
-                <div className="relative h-36 md:h-44 overflow-hidden">
-                  <img
-                    src={scheme.image}
-                    alt={scheme.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  {/* Highlight badge on image */}
-                  {scheme.highlight && (
-                    <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-lg">
-                      {scheme.highlight}
-                    </div>
-                  )}
+                {/* Full-card image */}
+                <img
+                  src={scheme.image}
+                  alt={scheme.title}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
 
-                </div>
+                {/* Gradient overlay - bottom only */}
+                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 to-transparent" />
 
-                {/* Content */}
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-base font-extrabold text-foreground leading-tight mb-2 group-hover:text-primary transition-colors">
+                {/* Highlight badge */}
+                {scheme.highlight && (
+                  <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-lg z-10">
+                    {scheme.highlight}
+                  </div>
+                )}
+
+                {/* Content overlaid at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+                  <h3 className="text-base font-extrabold text-white leading-tight mb-1">
                     {scheme.title}
                   </h3>
-                  <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-2 flex-1">
+                  <p className="text-[12px] text-white/80 leading-relaxed line-clamp-2 mb-4">
                     {scheme.desc}
                   </p>
-                  <div className="mt-8 flex justify-end">
+                  <div className="flex justify-end">
                     <Link
                       to={scheme.link}
                       className="animate-shimmer inline-flex items-center gap-3 bg-primary text-primary-foreground text-sm font-extrabold uppercase tracking-widest py-3.5 px-10 rounded-xl shadow-lg hover:shadow-primary/20 shrink-0"
@@ -389,14 +388,10 @@ const Index = () => {
                       Apply Now <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
-
-
-
                 </div>
 
                 {/* Full Accent Border on Hover */}
-                <div className="absolute inset-0 border-2 border-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-10" />
-
+                <div className="absolute inset-0 border-2 border-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-20" />
               </div>
             ))}
           </div>
@@ -436,8 +431,8 @@ const Index = () => {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
 
-                {/* Gradient Overlay with Text */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-5">
+                {/* Text overlay at bottom */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent pt-16 flex flex-col justify-end p-5">
                   <h3 className="text-white font-bold text-base md:text-lg mb-1 leading-tight">{story.title}</h3>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="h-1 w-6 bg-primary rounded-full"></span>
